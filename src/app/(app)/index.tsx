@@ -3,13 +3,19 @@ import React, { useEffect } from 'react';
 
 import { TaskList } from '@/components/task/task-list';
 import { Button, FocusAwareStatusBar, Text, View } from '@/components/ui';
-import { useTasks, useTaskStats, useTaskStore } from '@/lib/hooks';
+import {
+  useSampleData,
+  useTasks,
+  useTaskStats,
+  useTaskStore,
+} from '@/lib/hooks';
 
 export default function Home() {
   const router = useRouter();
   const { loadData, toggleTaskStatus } = useTaskStore();
   const { tasks } = useTasks({ status: ['pending'] }); // 진행 중인 할일만
   const stats = useTaskStats();
+  const { createSampleData } = useSampleData();
 
   useEffect(() => {
     loadData();
@@ -71,11 +77,18 @@ export default function Home() {
             <Text className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
               할일을 추가해보세요
             </Text>
-            <Button
-              label="할일 추가"
-              onPress={() => router.push('/add-task')}
-              className="mt-4"
-            />
+            <View className="mt-4 space-y-2">
+              <Button
+                label="할일 추가"
+                onPress={() => router.push('/add-task')}
+              />
+              <Button
+                label="샘플 데이터 추가 (데모용)"
+                variant="outline"
+                size="sm"
+                onPress={createSampleData}
+              />
+            </View>
           </View>
         )}
       </View>

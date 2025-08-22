@@ -3,6 +3,7 @@ export * from './caret-down';
 export * from './github';
 export * from './home';
 export * from './language';
+export * from './plus';
 export * from './rate';
 export * from './settings';
 export * from './share';
