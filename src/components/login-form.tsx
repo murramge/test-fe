@@ -1,36 +1,20 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
-import React from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
-import * as z from 'zod';
+import TeamSkyIcon from "/assets/teamsky-icon.png"
 
-import { Button, ControlledInput, Pressable, Text, View } from '@/components/ui';
-
-const schema = z.object({
-  name: z.string().optional(),
-  email: z
-    .string({
-      required_error: '이메일을 입력해주세요',
-    })
-    .email('올바른 이메일 형식이 아닙니다'),
-  password: z
-    .string({
-      required_error: '비밀번호를 입력해주세요',
-    })
-    .min(6, '비밀번호는 최소 6자 이상이어야 합니다'),
-});
-
-export type FormType = z.infer<typeof schema>;
+import { Button, ControlledInput, Image, Pressable, Text, View } from '@/components/ui';
+import { loginSchema, type LoginFormType } from '@/lib/validation/auth-schemas';
 
 export type LoginFormProps = {
-  onSubmit?: SubmitHandler<FormType>;
+  onSubmit?: SubmitHandler<LoginFormType>;
 };
 
 export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
-  const { handleSubmit, control } = useForm<FormType>({
-    resolver: zodResolver(schema),
+  const { handleSubmit, control } = useForm<LoginFormType>({
+    resolver: zodResolver(loginSchema),
   });
   return (
     <KeyboardAvoidingView
@@ -40,22 +24,16 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
     >
       <View className="flex-1 justify-center p-4">
         <View className="items-center justify-center">
-          <View className="mb-4 size-20 items-center justify-center rounded-2xl bg-blue-500">
-            <Text className="text-3xl">📋</Text>
-          </View>
+       <Image source={TeamSkyIcon} className="w-48 h-48" />
           <Text
             testID="form-title"
-            className="pb-2 text-center text-4xl font-bold text-gray-900 dark:text-white"
+            className="p-5 text-center text-4xl font-bold text-gray-900 dark:text-white"
           >
             TaskFlow
           </Text>
-          <Text className="pb-6 text-center text-lg font-medium text-blue-600 dark:text-blue-400">
-            로그인
-          </Text>
-
           <Text className="mb-6 max-w-sm text-center text-gray-600 dark:text-gray-400">
-            개인 할일 관리를 시작하세요! 💪
-            {'\n'}데모로 아무 이메일과 비밀번호를 입력해주세요.
+            직장인 할일 관리를 시작하세요! 💪
+           
           </Text>
         </View>
 
@@ -64,7 +42,7 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
           control={control}
           name="name"
           label="이름"
-          placeholder="김민수"
+          placeholder="강은화"
         />
 
         <ControlledInput
@@ -72,7 +50,7 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
           control={control}
           name="email"
           label="이메일"
-          placeholder="minsu@example.com"
+          placeholder="eunhwa@example.com"
         />
         <ControlledInput
           testID="password-input"

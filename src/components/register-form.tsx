@@ -4,29 +4,10 @@ import React from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
-import * as z from 'zod';
+import TeamSkyIcon from "/assets/teamsky-icon.png"
 
-import { Button, ControlledInput, Pressable, Text, View } from '@/components/ui';
-
-const schema = z.object({
-  name: z.string().min(2, '이름은 2자 이상 입력해주세요'),
-  email: z
-    .string({
-      required_error: '이메일을 입력해주세요',
-    })
-    .email('올바른 이메일 형식이 아닙니다'),
-  password: z
-    .string({
-      required_error: '비밀번호를 입력해주세요',
-    })
-    .min(6, '비밀번호는 최소 6자 이상이어야 합니다'),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: '비밀번호가 일치하지 않습니다',
-  path: ['confirmPassword'],
-});
-
-export type RegisterFormType = z.infer<typeof schema>;
+import { Button, ControlledInput, Image, Pressable, Text, View } from '@/components/ui';
+import { registerSchema, type RegisterFormType } from '@/lib/validation/auth-schemas';
 
 export type RegisterFormProps = {
   onSubmit?: SubmitHandler<RegisterFormType>;
@@ -34,7 +15,7 @@ export type RegisterFormProps = {
 
 export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
   const { handleSubmit, control } = useForm<RegisterFormType>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(registerSchema),
   });
 
   return (
@@ -45,18 +26,14 @@ export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
     >
       <View className="flex-1 justify-center p-4">
         <View className="items-center justify-center">
-          <View className="mb-4 size-20 items-center justify-center rounded-2xl bg-blue-500">
-            <Text className="text-3xl">📋</Text>
-          </View>
+      <Image source={TeamSkyIcon} className="w-32 h-32" />
           <Text
             testID="form-title"
-            className="pb-2 text-center text-4xl font-bold text-gray-900 dark:text-white"
+            className="p-5  text-center text-4xl font-bold text-gray-900 dark:text-white"
           >
             TaskFlow
           </Text>
-          <Text className="pb-6 text-center text-lg font-medium text-blue-600 dark:text-blue-400">
-            회원가입
-          </Text>
+
 
           <Text className="mb-6 max-w-sm text-center text-gray-600 dark:text-gray-400">
             TaskFlow와 함께 생산적인 하루를 시작하세요! 🚀

@@ -1,11 +1,13 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
+
 import { Alert } from 'react-native';
 
 import type { RegisterFormProps } from '@/components/register-form';
 import { RegisterForm } from '@/components/register-form';
 import { FocusAwareStatusBar } from '@/components/ui';
 import { useAuth } from '@/lib';
+
 
 export default function Register() {
   const router = useRouter();

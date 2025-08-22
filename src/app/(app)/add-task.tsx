@@ -3,45 +3,36 @@ import { Stack, useRouter } from 'expo-router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { showMessage } from 'react-native-flash-message';
-import { z } from 'zod';
 
 import { TaskForm } from '@/components/task/task-form';
 import { Button, FocusAwareStatusBar, ScrollView, View } from '@/components/ui';
 import { useCategories, useTaskStore } from '@/lib/hooks';
-
-const schema = z.object({
-  title: z.string().min(1, '제목을 입력해주세요'),
-  description: z.string().optional(),
-  priority: z.enum(['low', 'medium', 'high']).default('medium'),
-  categoryId: z.string().optional(),
-  dueDate: z.string().optional(),
-});
-
-type FormData = z.infer<typeof schema>;
+import { taskFormSchema, type TaskFormType } from '@/lib/validation/task-schemas';
 
 export default function AddTask() {
   const router = useRouter();
   const { addTask } = useTaskStore();
   const { categories } = useCategories();
 
-  const { control, handleSubmit, setValue, watch } = useForm<FormData>({
-    resolver: zodResolver(schema),
+  const { control, handleSubmit, setValue, watch } = useForm<TaskFormType>({
+    resolver: zodResolver(taskFormSchema),
     defaultValues: {
       priority: 'medium',
+      status: 'todo',
     },
   });
 
   const selectedPriority = watch('priority');
   const selectedCategoryId = watch('categoryId');
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: TaskFormType) => {
     addTask({
       title: data.title,
       description: data.description,
       priority: data.priority,
       categoryId: data.categoryId,
       dueDate: data.dueDate,
-      status: 'pending',
+      status: data.status,
     });
 
     showMessage({
