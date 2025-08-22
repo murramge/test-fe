@@ -46,7 +46,7 @@ export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
           control={control}
           name="name"
           label="이름"
-          placeholder="김민수"
+          placeholder="강은화"
         />
 
         <ControlledInput
@@ -54,7 +54,7 @@ export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
           control={control}
           name="email"
           label="이메일"
-          placeholder="minsu@example.com"
+          placeholder="eunhwa@example.com"
           keyboardType="email-address"
         />
 

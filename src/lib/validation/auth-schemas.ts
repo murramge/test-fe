@@ -1,7 +1,9 @@
 import * as z from 'zod';
 
 // 기본 필드 스키마들
-const nameSchema = z.string().min(2, '이름은 2자 이상 입력해주세요');
+const nameSchema = z.string({
+  required_error: '이름을 입력해주세요',
+}).min(2, '이름은 2자 이상 입력해주세요');
 
 const emailSchema = z
   .string({
@@ -13,11 +15,13 @@ const passwordSchema = z
   .string({
     required_error: '비밀번호를 입력해주세요',
   })
-  .min(6, '비밀번호는 최소 6자 이상이어야 합니다');
+  .min(8, '비밀번호는 최소 8자 이상이어야 합니다')
+  .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*$/, 
+    '비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다');
 
 // 로그인 스키마
 export const loginSchema = z.object({
-  name: z.string().optional(),
+  name: nameSchema,
   email: emailSchema,
   password: passwordSchema,
 });
@@ -27,7 +31,9 @@ export const registerSchema = z.object({
   name: nameSchema,
   email: emailSchema,
   password: passwordSchema,
-  confirmPassword: z.string(),
+  confirmPassword: z.string({
+    required_error: '비밀번호 확인을 입력해주세요',
+  }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: '비밀번호가 일치하지 않습니다',
   path: ['confirmPassword'],
