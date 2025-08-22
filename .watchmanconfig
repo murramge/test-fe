@@ -1,0 +1,10 @@
+{
+  "ignore_dirs": [
+    "node_modules/np/node_modules",
+    ".git",
+    "ios/Pods",
+    "ios/build",
+    "android/build"
+  ],
+  "settle": 20
+}
