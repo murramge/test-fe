@@ -17,6 +17,11 @@ export default function Onboarding() {
       <FocusAwareStatusBar />
       <View className="w-full flex-1"></View>
       <View className="justify-end ">
+        <View className="mb-4 items-center">
+          <View className="mb-4 size-24 items-center justify-center rounded-3xl bg-blue-500">
+            <Text className="text-4xl">📋</Text>
+          </View>
+        </View>
         <Text className="my-3 text-center text-5xl font-bold">TaskFlow</Text>
         <Text className="mb-2 text-center text-lg text-gray-600">
           개인 할일 관리 및 팀 협업을 위한 모바일 앱

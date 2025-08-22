@@ -20,6 +20,10 @@ const _useAuth = create<AuthState>((set, get) => ({
     set({ status: 'signIn', token });
   },
   signOut: () => {
+    // Clear user data when signing out
+    const { userStorage } = require('../storage/user-storage');
+    userStorage.clearCurrentUser();
+    
     removeToken();
     set({ status: 'signOut', token: null });
   },

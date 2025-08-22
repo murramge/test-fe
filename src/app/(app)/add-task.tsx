@@ -5,16 +5,9 @@ import { useForm } from 'react-hook-form';
 import { showMessage } from 'react-native-flash-message';
 import { z } from 'zod';
 
-import {
-  Button,
-  ControlledInput,
-  FocusAwareStatusBar,
-  ScrollView,
-  Text,
-  View,
-} from '@/components/ui';
+import { TaskForm } from '@/components/task/task-form';
+import { Button, FocusAwareStatusBar, ScrollView, View } from '@/components/ui';
 import { useCategories, useTaskStore } from '@/lib/hooks';
-import type { TaskPriority } from '@/types';
 
 const schema = z.object({
   title: z.string().min(1, '제목을 입력해주세요'),
@@ -59,12 +52,6 @@ export default function AddTask() {
     router.back();
   };
 
-  const priorities: { value: TaskPriority; label: string; color: string }[] = [
-    { value: 'low', label: '낮음', color: 'bg-green-500' },
-    { value: 'medium', label: '보통', color: 'bg-yellow-500' },
-    { value: 'high', label: '높음', color: 'bg-red-500' },
-  ];
-
   return (
     <>
       <Stack.Screen
@@ -78,82 +65,14 @@ export default function AddTask() {
         <FocusAwareStatusBar />
 
         <View className="p-4">
-          {/* Title Input */}
-          <ControlledInput
-            name="title"
-            label="제목"
+          <TaskForm
             control={control}
-            placeholder="할일을 입력하세요"
-            testID="task-title"
+            setValue={setValue}
+            selectedPriority={selectedPriority}
+            selectedCategoryId={selectedCategoryId}
+            categories={categories}
           />
 
-          {/* Description Input */}
-          <ControlledInput
-            name="description"
-            label="설명 (선택사항)"
-            control={control}
-            placeholder="상세 설명을 입력하세요"
-            multiline
-            numberOfLines={4}
-            testID="task-description"
-          />
-
-          {/* Priority Selection */}
-          <View className="mb-6">
-            <Text className="mb-3 text-base font-medium text-gray-900 dark:text-white">
-              우선순위
-            </Text>
-            <View className="flex-row space-x-3">
-              {priorities.map((priority) => (
-                <Button
-                  key={priority.value}
-                  label={priority.label}
-                  onPress={() => setValue('priority', priority.value)}
-                  variant={
-                    selectedPriority === priority.value ? 'default' : 'outline'
-                  }
-                  className="flex-1"
-                />
-              ))}
-            </View>
-          </View>
-
-          {/* Category Selection */}
-          <View className="mb-6">
-            <Text className="mb-3 text-base font-medium text-gray-900 dark:text-white">
-              카테고리
-            </Text>
-            <View className="flex-row flex-wrap gap-2">
-              <Button
-                label="없음"
-                onPress={() => setValue('categoryId', undefined)}
-                variant={!selectedCategoryId ? 'default' : 'outline'}
-                size="sm"
-              />
-              {categories.map((category) => (
-                <Button
-                  key={category.id}
-                  label={`${category.icon} ${category.name}`}
-                  onPress={() => setValue('categoryId', category.id)}
-                  variant={
-                    selectedCategoryId === category.id ? 'default' : 'outline'
-                  }
-                  size="sm"
-                />
-              ))}
-            </View>
-          </View>
-
-          {/* Due Date Input */}
-          <ControlledInput
-            name="dueDate"
-            label="마감일 (선택사항)"
-            control={control}
-            placeholder="YYYY-MM-DD"
-            testID="task-due-date"
-          />
-
-          {/* Submit Button */}
           <Button
             label="할일 추가"
             onPress={handleSubmit(onSubmit)}

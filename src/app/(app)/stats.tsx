@@ -120,7 +120,9 @@ export default function Stats() {
           {/* Empty State */}
           {stats.total === 0 && (
             <View className="items-center rounded-lg bg-white p-8 dark:bg-neutral-800">
-              <Text className="mb-4 text-6xl">📈</Text>
+              <View className="mb-4 size-16 items-center justify-center rounded-2xl bg-blue-500">
+                <Text className="text-2xl">📈</Text>
+              </View>
               <Text className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                 통계를 보려면 할일을 추가하세요
               </Text>

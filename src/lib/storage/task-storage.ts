@@ -1,25 +1,38 @@
 import { MMKV } from 'react-native-mmkv';
 
 import type { Category, Task } from '@/types';
+import { userStorage } from './user-storage';
 
 const storage = new MMKV({
   id: 'taskflow-storage',
 });
 
-// Storage keys
-const TASKS_KEY = 'tasks';
-const CATEGORIES_KEY = 'categories';
+// Storage keys with user isolation
+const getUserTasksKey = (userId: string) => `tasks_${userId}`;
+const getUserCategoriesKey = (userId: string) => `categories_${userId}`;
 
-// Task storage functions
+// Get current user ID or return null
+const getCurrentUserId = (): string | null => {
+  const user = userStorage.getCurrentUser();
+  return user ? user.id : null;
+};
+
+// Task storage functions with user isolation
 export const taskStorage = {
   // Tasks
   getTasks: (): Task[] => {
-    const tasksJson = storage.getString(TASKS_KEY);
+    const userId = getCurrentUserId();
+    if (!userId) return [];
+    
+    const tasksJson = storage.getString(getUserTasksKey(userId));
     return tasksJson ? JSON.parse(tasksJson) : [];
   },
 
   saveTasks: (tasks: Task[]): void => {
-    storage.set(TASKS_KEY, JSON.stringify(tasks));
+    const userId = getCurrentUserId();
+    if (!userId) return;
+    
+    storage.set(getUserTasksKey(userId), JSON.stringify(tasks));
   },
 
   addTask: (task: Task): void => {
@@ -62,12 +75,18 @@ export const taskStorage = {
 
   // Categories
   getCategories: (): Category[] => {
-    const categoriesJson = storage.getString(CATEGORIES_KEY);
+    const userId = getCurrentUserId();
+    if (!userId) return getDefaultCategories();
+    
+    const categoriesJson = storage.getString(getUserCategoriesKey(userId));
     return categoriesJson ? JSON.parse(categoriesJson) : getDefaultCategories();
   },
 
   saveCategories: (categories: Category[]): void => {
-    storage.set(CATEGORIES_KEY, JSON.stringify(categories));
+    const userId = getCurrentUserId();
+    if (!userId) return;
+    
+    storage.set(getUserCategoriesKey(userId), JSON.stringify(categories));
   },
 
   addCategory: (category: Category): void => {
@@ -115,10 +134,24 @@ export const taskStorage = {
     return categories.find((cat) => cat.id === categoryId) || null;
   },
 
-  // Clear all data
+  // Clear current user's data
+  clearUserData: (): void => {
+    const userId = getCurrentUserId();
+    if (!userId) return;
+    
+    storage.delete(getUserTasksKey(userId));
+    storage.delete(getUserCategoriesKey(userId));
+  },
+
+  // Clear all data (admin function)
   clearAll: (): void => {
-    storage.delete(TASKS_KEY);
-    storage.delete(CATEGORIES_KEY);
+    // This would clear all users' data - use with caution
+    const keys = storage.getAllKeys();
+    keys.forEach(key => {
+      if (key.startsWith('tasks_') || key.startsWith('categories_')) {
+        storage.delete(key);
+      }
+    });
   },
 };
 

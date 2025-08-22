@@ -1,14 +1,32 @@
 import { useRouter } from 'expo-router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { TaskList } from '@/components/task/task-list';
-import { Button, FocusAwareStatusBar, Text, View } from '@/components/ui';
-import { useTasks, useTaskStore } from '@/lib/hooks';
+import {
+  Button,
+  FloatingActionButton,
+  FocusAwareStatusBar,
+  QuickStats,
+  TaskFiltersComponent,
+  Text,
+  View,
+} from '@/components/ui';
+import {
+  useCategories,
+  useTasks,
+  useTaskStats,
+  useTaskStore,
+} from '@/lib/hooks';
+import type { TaskFilters } from '@/types';
 
 export default function Tasks() {
   const router = useRouter();
   const { loadData, toggleTaskStatus } = useTaskStore();
-  const { tasks, isLoading } = useTasks();
+  const { categories } = useCategories();
+  const stats = useTaskStats();
+  const [filters, setFilters] = useState<TaskFilters>({});
+  const [showFilters, setShowFilters] = useState(false);
+  const { tasks, isLoading } = useTasks(filters);
 
   useEffect(() => {
     loadData();
@@ -33,16 +51,42 @@ export default function Tasks() {
               {tasks.length}개의 할일
             </Text>
           </View>
-          <Button label="추가" onPress={handleAddTask} className="px-4 py-2" />
+          <Button
+            label="필터"
+            variant="outline"
+            size="sm"
+            onPress={() => setShowFilters(!showFilters)}
+          />
+        </View>
+
+        {/* Quick Stats */}
+        <View className="mt-4">
+          <QuickStats stats={stats} variant="compact" />
         </View>
       </View>
 
+      {/* Filters */}
+      {showFilters && (
+        <View className="px-4 pb-4">
+          <TaskFiltersComponent
+            filters={filters}
+            onFiltersChange={setFilters}
+            categories={categories}
+          />
+        </View>
+      )}
+
       {/* Task List */}
-      <TaskList
-        tasks={tasks}
-        isLoading={isLoading}
-        onToggleTaskStatus={toggleTaskStatus}
-      />
+      <View className="flex-1">
+        <TaskList
+          tasks={tasks}
+          isLoading={isLoading}
+          onToggleTaskStatus={toggleTaskStatus}
+        />
+      </View>
+
+      {/* Floating Action Button */}
+      <FloatingActionButton onPress={handleAddTask} />
     </View>
   );
 }

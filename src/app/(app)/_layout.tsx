@@ -1,8 +1,9 @@
 import { Redirect, SplashScreen, Tabs } from 'expo-router';
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import {
   Home as HomeIcon,
+  Plus,
   Settings as SettingsIcon,
   Stats as StatsIcon,
   Tasks as TasksIcon,
@@ -32,7 +33,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#3B82F6',
+        tabBarActiveTintColor: '#4A90E2',
         tabBarInactiveTintColor: '#6B7280',
         headerShown: false,
       }}
@@ -61,6 +62,15 @@ export default function TabLayout() {
           title: '통계',
           tabBarIcon: ({ color }) => <StatsIcon color={color} />,
           tabBarButtonTestID: 'stats-tab',
+        }}
+      />
+
+      <Tabs.Screen
+        name="add-task"
+        options={{
+          title: '추가',
+          tabBarIcon: ({ color }) => <Plus color={color} />,
+          tabBarButtonTestID: 'add-tab',
         }}
       />
 

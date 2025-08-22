@@ -9,7 +9,7 @@ import * as z from 'zod';
 import { Button, ControlledInput, Pressable, Text, View } from '@/components/ui';
 
 const schema = z.object({
-  name: z.string().optional(),
+  name: z.string().min(2, '이름은 2자 이상 입력해주세요'),
   email: z
     .string({
       required_error: '이메일을 입력해주세요',
@@ -20,18 +20,23 @@ const schema = z.object({
       required_error: '비밀번호를 입력해주세요',
     })
     .min(6, '비밀번호는 최소 6자 이상이어야 합니다'),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: '비밀번호가 일치하지 않습니다',
+  path: ['confirmPassword'],
 });
 
-export type FormType = z.infer<typeof schema>;
+export type RegisterFormType = z.infer<typeof schema>;
 
-export type LoginFormProps = {
-  onSubmit?: SubmitHandler<FormType>;
+export type RegisterFormProps = {
+  onSubmit?: SubmitHandler<RegisterFormType>;
 };
 
-export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
-  const { handleSubmit, control } = useForm<FormType>({
+export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
+  const { handleSubmit, control } = useForm<RegisterFormType>({
     resolver: zodResolver(schema),
   });
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -50,12 +55,12 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
             TaskFlow
           </Text>
           <Text className="pb-6 text-center text-lg font-medium text-blue-600 dark:text-blue-400">
-            로그인
+            회원가입
           </Text>
 
           <Text className="mb-6 max-w-sm text-center text-gray-600 dark:text-gray-400">
-            개인 할일 관리를 시작하세요! 💪
-            {'\n'}데모로 아무 이메일과 비밀번호를 입력해주세요.
+            TaskFlow와 함께 생산적인 하루를 시작하세요! 🚀
+            {'\n'}간단한 정보 입력으로 가입할 수 있습니다.
           </Text>
         </View>
 
@@ -73,7 +78,9 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
           name="email"
           label="이메일"
           placeholder="minsu@example.com"
+          keyboardType="email-address"
         />
+
         <ControlledInput
           testID="password-input"
           control={control}
@@ -82,26 +89,36 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
           placeholder="비밀번호를 입력하세요"
           secureTextEntry={true}
         />
-                  <Button
-            testID="login-button"
-            label="로그인"
-            onPress={handleSubmit(onSubmit)}
-            className="mt-4"
-          />
 
-          <View className="mt-6 flex-row items-center justify-center">
-            <Text className="text-gray-600 dark:text-gray-400">
-              계정이 없으신가요?{' '}
-            </Text>
-            <Link href="/register" asChild>
-              <Pressable>
-                <Text className="font-medium text-blue-600 dark:text-blue-400">
-                  회원가입
-                </Text>
-              </Pressable>
-            </Link>
-          </View>
+        <ControlledInput
+          testID="confirm-password-input"
+          control={control}
+          name="confirmPassword"
+          label="비밀번호 확인"
+          placeholder="비밀번호를 다시 입력하세요"
+          secureTextEntry={true}
+        />
+
+        <Button
+          testID="register-button"
+          label="회원가입"
+          onPress={handleSubmit(onSubmit)}
+          className="mt-4"
+        />
+
+        <View className="mt-6 flex-row items-center justify-center">
+          <Text className="text-gray-600 dark:text-gray-400">
+            이미 계정이 있으신가요?{' '}
+          </Text>
+          <Link href="/login" asChild>
+            <Pressable>
+              <Text className="font-medium text-blue-600 dark:text-blue-400">
+                로그인
+              </Text>
+            </Pressable>
+          </Link>
         </View>
-      </KeyboardAvoidingView>
-    );
-  };
+      </View>
+    </KeyboardAvoidingView>
+  );
+};

@@ -2,7 +2,14 @@ import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 
 import { TaskList } from '@/components/task/task-list';
-import { Button, FocusAwareStatusBar, Text, View } from '@/components/ui';
+import {
+  Button,
+  FloatingActionButton,
+  FocusAwareStatusBar,
+  QuickStats,
+  Text,
+  View,
+} from '@/components/ui';
 import {
   useSampleData,
   useTasks,
@@ -37,22 +44,9 @@ export default function Home() {
         </Text>
       </View>
 
-      {/* Stats Cards */}
-      <View className="mx-4 mt-4 flex-row space-x-4">
-        <View className="flex-1 rounded-lg bg-blue-500 p-4">
-          <Text className="text-2xl font-bold text-white">{stats.total}</Text>
-          <Text className="text-blue-100">전체 할일</Text>
-        </View>
-        <View className="flex-1 rounded-lg bg-green-500 p-4">
-          <Text className="text-2xl font-bold text-white">
-            {stats.completed}
-          </Text>
-          <Text className="text-green-100">완료됨</Text>
-        </View>
-        <View className="flex-1 rounded-lg bg-orange-500 p-4">
-          <Text className="text-2xl font-bold text-white">{stats.pending}</Text>
-          <Text className="text-orange-100">진행 중</Text>
-        </View>
+      {/* Quick Stats */}
+      <View className="mx-4 mt-4">
+        <QuickStats stats={stats} variant="detailed" />
       </View>
 
       {/* Recent Tasks Section */}
@@ -73,7 +67,9 @@ export default function Home() {
           <TaskList tasks={recentTasks} onToggleTaskStatus={toggleTaskStatus} />
         ) : (
           <View className="flex-1 items-center justify-center p-8">
-            <Text className="text-6xl">📝</Text>
+            <View className="mb-4 size-16 items-center justify-center rounded-2xl bg-blue-500">
+              <Text className="text-2xl">📋</Text>
+            </View>
             <Text className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
               할일을 추가해보세요
             </Text>
@@ -92,6 +88,11 @@ export default function Home() {
           </View>
         )}
       </View>
+
+      {/* Floating Action Button - only show when no tasks */}
+      {recentTasks.length === 0 && (
+        <FloatingActionButton onPress={() => router.push('/add-task')} />
+      )}
     </View>
   );
 }
