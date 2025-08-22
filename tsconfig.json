@@ -8,7 +8,9 @@
       "@env": ["./src/lib/env.js"]
     },
     "esModuleInterop": true,
-    "checkJs": true
+    "checkJs": true,
+    "jsx": "react-jsx",
+    "skipLibCheck": true
   },
   "exclude": [
     "node_modules",

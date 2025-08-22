@@ -11,8 +11,12 @@ export default function Login() {
   const signIn = useAuth.use.signIn();
 
   const onSubmit: LoginFormProps['onSubmit'] = (data) => {
-    console.log(data);
-    signIn({ access: 'access-token', refresh: 'refresh-token' });
+    console.log('로그인 데이터:', data);
+    // 데모용 로그인 - 실제 프로젝트에서는 서버 API 호출
+    signIn({
+      access: 'taskflow-access-token',
+      refresh: 'taskflow-refresh-token',
+    });
     router.push('/');
   };
   return (

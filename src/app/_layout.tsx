@@ -38,6 +38,14 @@ export default function RootLayout() {
         <Stack.Screen name="(app)" options={{ headerShown: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="add-task"
+          options={{
+            presentation: 'modal',
+            headerShown: true,
+            title: '할일 추가',
+          }}
+        />
       </Stack>
     </Providers>
   );
