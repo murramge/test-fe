@@ -242,12 +242,12 @@ export default function Home() {
           {/* 개인화된 헤더 & 생산성 인사이트 */}
           <View className="mb-6">
             <View className="flex-row items-center">
-              <Text className="text-2xl font-bold text-gray-900 dark:text-white">
+              <Text className="text-2xl font-bold text-gray-900 dark:text-white my-2">
                 {getGreeting()}, {currentUser?.name || '사용자'}님!
               </Text>
               <Wave color="#6b7280" size={24} style={{ marginLeft: 8 }} />
             </View>
-            <Text className="text-gray-600 dark:text-gray-400">
+            <Text className="text-gray-600 dark:text-gray-400 mb-2">
               오늘 완료: {stats.completed}개 | 진행 중: {stats.pending}개 | 전체: {stats.total}개
             </Text>
             
@@ -311,7 +311,7 @@ export default function Home() {
                   autoFocus
                 />
 
-                <View className="flex-row space-x-3">
+                <View className="flex-row space-x-3 gap-2">
                   <Button
                     label="빠르게 추가"
                     onPress={handleQuickAdd}
@@ -498,16 +498,8 @@ export default function Home() {
                           </View>
 
                           <View className="ml-2 flex-row space-x-1">
-                            <View
-                              className={`rounded px-2 py-1 ${
-                                task.priority === 'high'
-                                  ? 'bg-red-100 dark:bg-red-900/50'
-                                  : task.priority === 'medium'
-                                  ? 'bg-yellow-100 dark:bg-yellow-900/50'
-                                  : 'bg-green-100 dark:bg-green-900/50'
-                              }`}
-                            >
-                              <View className="flex-row items-center">
+                            <View>
+                              <View className="flex-row items-center ">
                                 {task.priority === 'high' ? (
                                   <PriorityHigh size={12} />
                                 ) : task.priority === 'medium' ? (

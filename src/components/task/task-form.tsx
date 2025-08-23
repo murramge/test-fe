@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import type { Control } from 'react-hook-form';
-import { Alert, TextInput, Pressable } from 'react-native';
+import { Alert, TextInput, Pressable, useColorScheme } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 
-import { Button, CategoryManagementModal, ControlledInput, Modal, Text, View, useModal } from '@/components/ui';
+import { Button, CategoryManagementModal, ControlledInput, DatePicker, Modal, Text, View, useModal } from '@/components/ui';
 import { Lightbulb, Lightning, Fire, Rocket, Star, Trophy, Chart, Folder, Briefcase, Home, Target, Book, DollarSign, Activity, Palette, ChartLine, Person } from '@/components/ui/icons';
 import { useCategories } from '@/lib/hooks';
 import type { TaskPriority } from '@/types';
@@ -15,6 +15,7 @@ type FormData = TaskFormType;
 type Props = {
   control: Control<FormData>;
   setValue: (field: keyof FormData, value: any) => void;
+  watch?: (field: keyof FormData) => any;
   selectedPriority: TaskPriority;
   selectedCategoryId?: string;
   categories: { id: string; name: string; icon?: string; color?: string }[];
@@ -23,6 +24,7 @@ type Props = {
 export function TaskForm({
   control,
   setValue,
+  watch,
   selectedPriority,
   selectedCategoryId,
   categories,
@@ -33,6 +35,7 @@ export function TaskForm({
   const [showCategoryManagement, setShowCategoryManagement] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState('folder');
   const [selectedColor, setSelectedColor] = useState('#3B82F6');
+  const colorScheme = useColorScheme();
 
   // 카테고리 아이콘 매핑
   const getCategoryIcon = (iconKey?: string) => {
@@ -122,30 +125,43 @@ export function TaskForm({
   ];
 
   return (
-    <View className="space-y-6">
-      <ControlledInput
-        name="title"
-        label="제목"
-        control={control}
-        placeholder="할일을 입력하세요"
-        testID="task-title"
-      />
-
-      <ControlledInput
-        name="description"
-        label="설명 (선택사항)"
-        control={control}
-        placeholder="상세 설명을 입력하세요"
-        multiline
-        numberOfLines={4}
-        testID="task-description"
-      />
-
+    <View className="space-y-8">
+      {/* 할 일 입력 */}
       <View>
-        <Text className="mb-3 text-base font-medium text-gray-900 dark:text-white">
+        <Text className="text-lg font-semibold text-gray-900 dark:text-white">
+          할 일 *
+        </Text>
+        <ControlledInput
+          name="title"
+          control={control}
+          placeholder="할일을 입력하세요"
+          testID="task-title"
+          className="text-base py-2 text-gray-900 dark:text-white"
+        />
+      </View>
+
+      {/* 설명 입력 */}
+      <View>
+        <Text className=" text-lg font-semibold text-gray-900 dark:text-white">
+          설명
+        </Text>
+        <ControlledInput
+          name="description"
+          control={control}
+          placeholder="상세 설명을 입력하세요 (선택사항)"
+          multiline
+          numberOfLines={4}
+          testID="task-description"
+          className="text-base py-2 text-gray-900 dark:text-white"
+        />
+      </View>
+
+      {/* 우선순위 선택 */}
+      <View>
+        <Text className="my-1 text-lg font-semibold text-gray-900 dark:text-white">
           우선순위
         </Text>
-        <View className="flex-row space-x-3">
+        <View className="flex-row gap-2">
           {priorities.map((priority) => (
             <Button
               key={priority.value}
@@ -154,15 +170,16 @@ export function TaskForm({
               variant={
                 selectedPriority === priority.value ? 'default' : 'outline'
               }
-              className="flex-1"
+              size="sm"
             />
           ))}
         </View>
       </View>
 
+      {/* 카테고리 선택 */}
       <View>
-        <View className="mb-3 flex-row items-center justify-between">
-          <Text className="text-base font-medium text-gray-900 dark:text-white">
+        <View className="my-3 flex-row items-center justify-between">
+          <Text className="text-lg font-semibold text-gray-900 dark:text-white">
             카테고리
           </Text>
           {categories.length > 0 && (
@@ -174,12 +191,13 @@ export function TaskForm({
             />
           )}
         </View>
-        <View className="flex-row flex-wrap gap-2">
+        <View className="flex-row flex-wrap gap-1">
           <Button
             label="없음"
             onPress={() => setValue('categoryId', undefined)}
             variant={!selectedCategoryId ? 'default' : 'outline'}
             size="sm"
+          
           />
           {categories.map((category) => {
             const IconComponent = getCategoryIcon(category.icon);
@@ -191,10 +209,11 @@ export function TaskForm({
                   selectedCategoryId === category.id ? 'default' : 'outline'
                 }
                 size="sm"
+              
               >
                 <View className="flex-row items-center">
-                  <IconComponent size={14} color={category.color} />
-                  <Text className={`ml-2 text-sm ${selectedCategoryId === category.id ? 'text-white dark:text-gray-900' : 'text-gray-900 dark:text-white'}`}>
+                  <IconComponent size={16} color={category.color} />
+                  <Text className={`ml-1 text-sm ${selectedCategoryId === category.id ? 'text-white dark:text-gray-900' : 'text-gray-900 dark:text-white'}`}>
                     {category.name}
                   </Text>
                 </View>
@@ -206,24 +225,30 @@ export function TaskForm({
             onPress={addCategoryModal.present}
             variant="outline"
             size="sm"
-            className="border-dashed border-blue-300 bg-blue-50 dark:border-blue-700 dark:bg-blue-900/20"
+            className="border-dashed border-blue-300 bg-blue-50  dark:border-blue-700 dark:bg-blue-900/20"
           />
         </View>
       </View>
 
-      <ControlledInput
-        name="dueDate"
-        label="마감일 (선택사항)"
-        control={control}
-        placeholder="YYYY-MM-DD"
-        testID="task-due-date"
-      />
+      {/* 마감일 선택 */}
+      <View>
+        <Text className="my-3 text-lg font-semibold text-gray-900 dark:text-white">
+          마감일
+        </Text>
+        <DatePicker
+          value={watch ? watch('dueDate') || '' : ''}
+          onDateChange={(date) => setValue('dueDate', date)}
+          placeholder="마감일을 선택하세요 (선택사항)"
+          testID="task-due-date"
+         
+        />
+      </View>
 
       {/* 카테고리 추가 모달 */}
       <Modal
         ref={addCategoryModal.ref}
         title="새 카테고리 추가"
-        snapPoints={['70%']}
+        snapPoints={['73%']}
       >
         <View className="flex-1 bg-white p-4 dark:bg-gray-900">
           <View className="space-y-6">
@@ -236,7 +261,7 @@ export function TaskForm({
                 value={newCategoryName}
                 onChangeText={setNewCategoryName}
                 placeholder="카테고리 이름 (예: 중요 프로젝트, 개인 개발)"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colorScheme === 'dark' ? '#9CA3AF' : '#6B7280'}
                 className="rounded-lg border border-gray-300 bg-gray-50 p-3 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 autoFocus
               />
@@ -255,7 +280,7 @@ export function TaskForm({
                     <Pressable
                       key={option.key}
                       onPress={() => setSelectedIcon(option.key)}
-                      className={`items-center justify-center rounded-lg p-2 ${
+                      className={`items-center justify-center rounded-lg p-3 ${
                         isSelected 
                           ? 'bg-blue-100 border-2 border-blue-500 dark:bg-blue-900/50 dark:border-blue-400'
                           : 'bg-gray-100 border border-gray-300 dark:bg-gray-700 dark:border-gray-600'
@@ -263,7 +288,7 @@ export function TaskForm({
                     >
                       <IconComponent 
                         size={18} 
-                        color={isSelected ? selectedColor : '#6b7280'} 
+                        color={isSelected ? selectedColor : (colorScheme === 'dark' ? '#9CA3AF' : '#6b7280')} 
                       />
                     </Pressable>
                   );
@@ -283,8 +308,8 @@ export function TaskForm({
                     onPress={() => setSelectedColor(color)}
                     className={`h-8 w-8 rounded-full ${
                       selectedColor === color 
-                        ? 'border-4 border-gray-400 dark:border-gray-300'
-                        : 'border border-gray-300 dark:border-gray-600'
+                        ? 'border-4 border-gray-500 dark:border-gray-200'
+                        : 'border-2 border-gray-300 dark:border-gray-600'
                     }`}
                     style={{ backgroundColor: color }}
                   />
@@ -310,20 +335,20 @@ export function TaskForm({
 
             {/* 팁 */}
             <View className="flex-row items-start gap-2 my-3">
-              <Lightbulb color="#6b7280" size={16} />
-              <Text className=" text-sm text-gray-500 dark:text-gray-400">
+              <Lightbulb color={colorScheme === 'dark' ? '#9CA3AF' : '#6B7280'} size={16} />
+              <Text className="text-sm text-gray-500 dark:text-gray-400">
                 팁: 업무별, 프로젝트별, 우선순위별로 카테고리를 만들어보세요
               </Text>
             </View>
           </View>
 
           {/* 하단 버튼들 */}
-          <View className="mt-6 flex-row space-x-3">
+          <View className="mt-6 flex-row gap-3">
             <Button
               label="추가하기"
               onPress={handleAddCategory}
-              className="flex-1"
-              size="sm"
+              className="flex-1"  
+              size="default"
             />
             <Button
               label="취소"
@@ -335,7 +360,7 @@ export function TaskForm({
                 setSelectedColor('#3B82F6');
               }}
               className="flex-1"
-              size="sm"
+              size="default"
             />
           </View>
         </View>

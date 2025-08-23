@@ -153,7 +153,7 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
                       value={editName}
                       onChangeText={setEditName}
                       placeholder="카테고리 이름"
-                      className="w-full"
+                      className="w-full text-gray-900 dark:text-white"
                     />
                     
                     {/* 아이콘 선택 */}
@@ -220,10 +220,7 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
                 ) : (
                   <View className="flex-row items-center justify-between">
                     <View className="flex-row items-center flex-1">
-                      <View
-                        className="mr-3 h-4 w-4 rounded-full"
-                        style={{ backgroundColor: category.color }}
-                      />
+                      
                       <View className="mr-2">
                         {(() => {
                           // 먼저 키 기반으로 찾기

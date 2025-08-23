@@ -7,15 +7,18 @@ import { PriorityChart } from '@/components/charts/priority-chart';
 import { ProductivityMetrics } from '@/components/charts/productivity-metrics';
 import { ProductivityPattern } from '@/components/charts/productivity-pattern';
 import { ProgressRing } from '@/components/charts/progress-ring';
-import { FocusAwareStatusBar, ScrollView, Text, View } from '@/components/ui';
+import { FocusAwareStatusBar, ScrollView, Text, View, SafeAreaView } from '@/components/ui';
 import { ChartBar, ChartLine, Sparkles, Fire, Party, ThumbsUp } from '@/components/ui/icons';
-import { SafeAreaView } from 'react-native';
+import { Platform, StatusBar, Dimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFilteredStats, useTaskStore } from '@/lib/hooks';
 
 export default function Stats() {
   const { loadData } = useTaskStore();
   const [selectedRange, setSelectedRange] = useState<DateRange>('30days');
   const { stats, previousStats, filteredTasks } = useFilteredStats(selectedRange);
+  const insets = useSafeAreaInsets();
+  const { width: screenWidth } = Dimensions.get('window');
 
   useEffect(() => {
     loadData();
@@ -47,27 +50,32 @@ export default function Stats() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#2563EB' }}>
-      <View className="flex-1 bg-gray-50 dark:bg-neutral-900">
-        <FocusAwareStatusBar />
+    <SafeAreaView className="flex-1 ">
+      <FocusAwareStatusBar />
+      
+      <View className="flex-1 ">
+        {/* Fixed Header with proper SafeArea handling */}
+     
 
-        {/* Header */}
-        <View className="bg-blue-600 px-6 pb-8 pt-4">
-          <Text className="text-3xl font-bold text-white">
-            <View className="flex-row items-center">
-              <Text className="text-3xl font-bold text-white mr-3">
-                생산성 대시보드
-              </Text>
-              <ChartBar color="white" size={28} />
-            </View>
-          </Text>
-          <Text className="mt-2 text-blue-100">
+        {/* Scrollable Content Area */}
+        <View className="flex-1 bg-gray-50 dark:bg-neutral-900">
+          <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+          <View className=" px-6 " 
+              style={{ 
+                paddingTop: Platform.OS === 'ios' ? 0 : 20,
+                minHeight: Platform.OS === 'ios' ? 80 : 100 
+              }}>
+          <View className="flex-row   mb-2">
+            <ChartBar color="white" size={28} />
+            <Text className="text-2xl font-bold text-white ml-3">
+              생산성 대시보드
+            </Text>
+          </View>
+          <Text className=" text-blue-100 text-base">
             {getMotivationalMessage()}
           </Text>
         </View>
-
-      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        <View style={{ paddingHorizontal: 12, paddingTop: 10, paddingBottom: 16 }}>
+            <View style={{ paddingHorizontal: 12, paddingTop: 10, paddingBottom: 16 }}>
           {/* 날짜 필터 */}
           <View style={{ marginBottom: 12 }}>
             <DateFilter
@@ -142,10 +150,11 @@ export default function Stats() {
                   : '다른 기간을 선택하거나 새로운 할일을 추가해보세요'
                 }
               </Text>
-            </View>
-          )}
+              </View>
+            )}
+          </View>
+        </ScrollView>
         </View>
-      </ScrollView>
       </View>
     </SafeAreaView>
   );

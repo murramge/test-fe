@@ -5,6 +5,7 @@ export * from './button';
 export * from './category-management-modal';
 export * from './checkbox';
 export { default as colors } from './colors';
+export * from './date-picker';
 export * from './floating-action-button';
 export * from './focus-aware-status-bar';
 export * from './image';

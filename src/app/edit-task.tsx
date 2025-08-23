@@ -109,6 +109,7 @@ export default function EditTask() {
           <TaskForm
             control={control}
             setValue={setValue}
+            watch={watch}
             selectedPriority={selectedPriority}
             selectedCategoryId={selectedCategoryId}
             categories={categories.map(cat => ({

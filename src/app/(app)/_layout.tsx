@@ -6,7 +6,9 @@ import {
   Settings as SettingsIcon,
   Stats as StatsIcon,
   Tasks as TasksIcon,
+  Plus as PlusIcon,
 } from '@/components/ui/icons';
+import { View } from '@/components/ui';
 import { useAuth, useIsFirstTime } from '@/lib';
 
 export default function TabLayout() {
@@ -58,6 +60,20 @@ export default function TabLayout() {
           title: '할일',
           tabBarIcon: ({ color }) => <TasksIcon color={color} />,
           tabBarButtonTestID: 'tasks-tab',
+        }}
+      />
+
+      <Tabs.Screen
+        name="add-task"
+        options={{
+          title: '',
+          tabBarIcon: ({ color }) => (
+            <View className="items-center justify-center h-12 w-12 bg-blue-500 rounded-full">
+              <PlusIcon color="white" size={24} />
+            </View>
+          ),
+          tabBarButtonTestID: 'add-task-tab',
+          tabBarShowLabel: false,
         }}
       />
 

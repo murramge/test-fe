@@ -3,7 +3,12 @@ import * as z from 'zod';
 import type { TaskPriority, TaskStatus } from '@/types/task';
 
 // 기본 필드 스키마들
-const titleSchema = z.string().min(1, '제목을 입력해주세요');
+const titleSchema = z.string({
+  required_error: '할 일을 입력해주세요',
+  invalid_type_error: '할 일을 입력해주세요',
+}).min(1, '할 일을 입력해주세요').refine((val) => val.trim().length > 0, {
+  message: '할 일을 입력해주세요',
+});
 
 const descriptionSchema = z.string().optional();
 

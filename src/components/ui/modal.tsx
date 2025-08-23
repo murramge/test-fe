@@ -36,7 +36,6 @@ import { BottomSheetModal, useBottomSheet } from '@gorhom/bottom-sheet';
 import * as React from 'react';
 import { Pressable, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { Path, Svg } from 'react-native-svg';
 
 import { Text } from './text';
 
