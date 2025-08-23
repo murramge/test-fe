@@ -91,30 +91,13 @@ export default function Stats() {
               )}
 
               {/* 전체 진행률 링 */}
-              <View style={{
-                backgroundColor: 'white',
-                borderRadius: 12,
-                padding: 12,
-                marginBottom: 12,
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 8,
-                elevation: 3,
-              }}>
-                <Text style={{
-                  fontSize: 16,
-                  fontWeight: '600',
-                  color: '#111827',
-                  marginBottom: 10,
-                }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-                    <ChartLine color="#111827" size={18} />
-                    <Text style={{ marginLeft: 6, fontSize: 16, fontWeight: '600', color: '#111827' }}>
-                      전체 진행률
-                    </Text>
-                  </View>
-                </Text>
+              <View className="bg-white dark:bg-neutral-800 rounded-xl p-3 mb-3 shadow-sm">
+                <View className="flex-row items-center mb-2">
+                  <ChartLine color="#111827" size={18} />
+                  <Text className="ml-2 text-base font-semibold text-gray-900 dark:text-white">
+                    전체 진행률
+                  </Text>
+                </View>
                 <View style={{ alignItems: 'center' }}>
                   <ProgressRing
                     percentage={stats.completionRate}
@@ -132,77 +115,28 @@ export default function Stats() {
 
               {/* 카테고리별 분석 */}
               {stats.byCategory.length > 0 && (
-                <View style={{
-                  backgroundColor: 'white',
-                  borderRadius: 12,
-                  padding: 10,
-                  marginBottom: 12,
-                  shadowColor: '#000',
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.1,
-                  shadowRadius: 8,
-                  elevation: 3,
-                }}>
+                <View className="bg-white dark:bg-neutral-800 rounded-xl p-3 mb-3 shadow-sm">
                   <CategoryChart stats={stats} />
                 </View>
               )}
 
               {/* 우선순위별 분석 */}
               {stats.byPriority.some((p) => p.total > 0) && (
-                <View style={{
-                  backgroundColor: 'white',
-                  borderRadius: 12,
-                  padding: 10,
-                  marginBottom: 0, // 마지막 요소는 하단 여백 없음
-                  shadowColor: '#000',
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.1,
-                  shadowRadius: 8,
-                  elevation: 3,
-                }}>
+                <View className="bg-white dark:bg-neutral-800 rounded-xl p-3 shadow-sm">
                   <PriorityChart stats={stats} />
                 </View>
               )}
             </>
           ) : (
             /* Empty State */
-            <View style={{
-              alignItems: 'center',
-              backgroundColor: 'white',
-              borderRadius: 12,
-              padding: 16,
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 8,
-              elevation: 3,
-            }}>
-              <View style={{
-                marginBottom: 8,
-                width: 60,
-                height: 60,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 30,
-                backgroundColor: '#3B82F6',
-              }}>
+            <View className="items-center bg-white dark:bg-neutral-800 rounded-xl p-4 shadow-sm">
+              <View className="mb-2 w-15 h-15 items-center justify-center rounded-full bg-blue-500">
                 <ChartLine color="white" size={32} />
               </View>
-              <Text style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: '#111827',
-                marginBottom: 4,
-                textAlign: 'center',
-              }}>
+              <Text className="text-lg font-bold text-gray-900 dark:text-white mb-1 text-center">
                 {selectedRange === 'all' ? '통계를 보려면 할일을 추가하세요' : '이 기간에는 데이터가 없어요'}
               </Text>
-              <Text style={{
-                fontSize: 12,
-                color: '#6B7280',
-                textAlign: 'center',
-                lineHeight: 16,
-              }}>
+              <Text className="text-xs text-gray-600 dark:text-gray-400 text-center leading-4">
                 {selectedRange === 'all' 
                   ? '할일을 완료할 때마다 여기서 진행 상황을 확인할 수 있습니다'
                   : '다른 기간을 선택하거나 새로운 할일을 추가해보세요'

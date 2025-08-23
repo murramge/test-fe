@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { Text, View } from 'react-native';
+import { useColorScheme } from 'nativewind';
 
 import { Calendar } from '@/components/ui/icons';
 import type { Task } from '@/types';
@@ -11,6 +12,9 @@ type Props = {
 };
 
 export function ActivityHeatmap({ tasks, dateRange }: Props) {
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === 'dark';
+  
   const activityData = useMemo(() => {
     const days = dateRange === '7days' ? 7 : 30;
     const today = new Date();
@@ -44,47 +48,29 @@ export function ActivityHeatmap({ tasks, dateRange }: Props) {
 
   const maxCompleted = Math.max(...activityData.map(d => d.completedCount), 1);
 
-  const getIntensityColor = (count: number) => {
+  const getIntensityColor = (count: number, isDark = false) => {
     const intensity = count / maxCompleted;
-    if (count === 0) return 'bg-gray-100 dark:bg-gray-700';
-    if (intensity <= 0.25) return 'bg-blue-200 dark:bg-blue-900';
-    if (intensity <= 0.5) return 'bg-blue-400 dark:bg-blue-700';
-    if (intensity <= 0.75) return 'bg-blue-500 dark:bg-blue-600';
-    return 'bg-blue-600 dark:bg-blue-500';
+    if (count === 0) return isDark ? '#374151' : '#F3F4F6'; // gray-700 : gray-100
+    if (intensity <= 0.25) return isDark ? '#1e3a8a' : '#DBEAFE'; // blue-900 : blue-200
+    if (intensity <= 0.5) return isDark ? '#1d4ed8' : '#93C5FD'; // blue-700 : blue-400
+    if (intensity <= 0.75) return isDark ? '#2563eb' : '#60A5FA'; // blue-600 : blue-500
+    return isDark ? '#3b82f6' : '#3B82F6'; // blue-500 : blue-600
   };
 
   return (
-    <View style={{
-      backgroundColor: 'white',
-      borderRadius: 12,
-      padding: 10,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 8,
-      elevation: 3,
-    }}>
+    <View className="bg-white dark:bg-neutral-800 rounded-xl p-3 shadow-sm">
       <View style={{
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 8,
       }}>
         <Calendar color="#6366f1" size={16} />
-        <Text style={{
-          fontSize: 16,
-          fontWeight: '600',
-          color: '#111827',
-          marginLeft: 6,
-        }}>
+        <Text className="text-base font-semibold text-gray-900 dark:text-white ml-2">
           활동 히트맵
         </Text>
       </View>
       
-      <Text style={{
-        fontSize: 12,
-        color: '#6B7280',
-        marginBottom: 8,
-      }}>
+      <Text className="text-xs text-gray-600 dark:text-gray-400 mb-2">
         지난 {dateRange === '7days' ? '7일' : '30일'}간 완료한 할일 수
       </Text>
 
@@ -101,36 +87,25 @@ export function ActivityHeatmap({ tasks, dateRange }: Props) {
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: 6,
-              backgroundColor: getIntensityColor(day.completedCount).includes('gray') ? '#F3F4F6' : 
-                             getIntensityColor(day.completedCount).includes('blue-200') ? '#DBEAFE' :
-                             getIntensityColor(day.completedCount).includes('blue-400') ? '#93C5FD' :
-                             getIntensityColor(day.completedCount).includes('blue-500') ? '#60A5FA' : '#3B82F6',
+              backgroundColor: getIntensityColor(day.completedCount, isDark),
               borderWidth: day.isToday ? 1 : 0,
               borderColor: day.isToday ? '#3B82F6' : 'transparent',
             }}>
               <Text style={{
                 fontSize: 10,
                 fontWeight: '500',
-                color: day.completedCount === 0 ? '#9CA3AF' : 'white',
+                color: day.completedCount === 0 ? (isDark ? '#9CA3AF' : '#6B7280') : 'white',
               }}>
                 {day.day}
               </Text>
             </View>
             {dateRange === '7days' && (
-              <Text style={{
-                marginTop: 2,
-                fontSize: 8,
-                color: '#6B7280',
-              }}>
+              <Text className="mt-1 text-xs text-gray-600 dark:text-gray-400">
                 {day.weekday}
               </Text>
             )}
             {day.completedCount > 0 && (
-              <Text style={{
-                marginTop: 1,
-                fontSize: 8,
-                color: '#6B7280',
-              }}>
+              <Text className="mt-1 text-xs text-gray-600 dark:text-gray-400">
                 {day.completedCount}
               </Text>
             )}
@@ -145,23 +120,17 @@ export function ActivityHeatmap({ tasks, dateRange }: Props) {
         alignItems: 'center',
         justifyContent: 'space-between',
       }}>
-        <Text style={{
-          fontSize: 10,
-          color: '#6B7280',
-        }}>
+        <Text className="text-xs text-gray-600 dark:text-gray-400">
           적음
         </Text>
         <View style={{ flexDirection: 'row', gap: 2 }}>
-          <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: '#F3F4F6' }} />
-          <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: '#DBEAFE' }} />
-          <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: '#93C5FD' }} />
-          <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: '#60A5FA' }} />
-          <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: '#3B82F6' }} />
+          <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: getIntensityColor(0, isDark) }} />
+          <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: getIntensityColor(0.2 * maxCompleted, isDark) }} />
+          <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: getIntensityColor(0.4 * maxCompleted, isDark) }} />
+          <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: getIntensityColor(0.7 * maxCompleted, isDark) }} />
+          <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: getIntensityColor(maxCompleted, isDark) }} />
         </View>
-        <Text style={{
-          fontSize: 10,
-          color: '#6B7280',
-        }}>
+        <Text className="text-xs text-gray-600 dark:text-gray-400">
           많음
         </Text>
       </View>

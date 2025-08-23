@@ -119,7 +119,7 @@ export function TaskFiltersComponent({
               }
               onPress={() => toggleStatus(option.value)}
             >
-              <Text className={`text-sm ${filters.status?.includes(option.value) ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+              <Text className={`text-sm ${filters.status?.includes(option.value) ? 'text-gray-100 dark:text-gray-900' : 'text-gray-900 dark:text-gray-100'}`}>
                 {option.label}
               </Text>
             </Button>
@@ -144,7 +144,7 @@ export function TaskFiltersComponent({
             >
               <View className="flex-row items-center space-x-1">
                 <option.component size={12} />
-                <Text className={`text-sm ml-2 ${filters.priority?.includes(option.value) ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                <Text className={`text-sm ml-2 ${filters.priority?.includes(option.value) ? 'text-gray-100 dark:text-gray-900' : 'text-gray-900 dark:text-gray-100'}`}>
                   {option.label}
                 </Text>
               </View>
@@ -174,9 +174,9 @@ export function TaskFiltersComponent({
                   <View className="flex-row items-center">
                     <IconComponent 
                       size={14} 
-                      color={filters.categoryId === category.id ? '#ffffff' : (category.color || '#6b7280')} 
+                      color={category.color} 
                     />
-                    <Text className={`ml-2 text-sm ${filters.categoryId === category.id ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                    <Text className={`ml-2 text-sm ${filters.categoryId === category.id ? 'text-gray-100 dark:text-gray-900' : 'text-gray-900 dark:text-gray-100'}`}>
                       {category.name}
                     </Text>
                   </View>

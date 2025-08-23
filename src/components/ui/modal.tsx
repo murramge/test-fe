@@ -86,10 +86,10 @@ export const Modal = React.forwardRef(
 
     const renderHandleComponent = React.useCallback(
       () => (
-        <>
+        <View className="bg-white dark:bg-gray-900">
           <View className="mb-8 mt-2 h-1 w-12 self-center rounded-lg bg-gray-400 dark:bg-gray-700" />
           <ModalHeader title={title} dismiss={modal.dismiss} />
-        </>
+        </View>
       ),
       [title, modal.dismiss]
     );
@@ -104,6 +104,8 @@ export const Modal = React.forwardRef(
         backdropComponent={props.backdropComponent || renderBackdrop}
         enableDynamicSizing={false}
         handleComponent={renderHandleComponent}
+        backgroundStyle={{ backgroundColor: 'transparent' }}
+        handleIndicatorStyle={{ backgroundColor: '#6B7280' }}
       />
     );
   }
@@ -157,7 +159,7 @@ const getDetachedProps = (detached: boolean) => {
 
 const ModalHeader = React.memo(({ title, dismiss }: ModalHeaderProps) => {
   return (
-    <>
+    <View className="bg-white dark:bg-gray-900">
       {title && (
         <View className="flex-row px-2 py-4">
           <View className="size-[24px]" />
@@ -169,7 +171,7 @@ const ModalHeader = React.memo(({ title, dismiss }: ModalHeaderProps) => {
         </View>
       )}
       <CloseButton close={dismiss} />
-    </>
+    </View>
   );
 });
 

@@ -130,8 +130,9 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
       ref={modal.ref} 
       title="카테고리 관리"
       snapPoints={['70%']}
+      
     >
-      <View className="flex-1 p-6">
+      <View className="flex-1 bg-white p-6 dark:bg-gray-900">
         {categories.length === 0 ? (
           <View className="py-8 text-center">
             <Text className="text-gray-500 dark:text-gray-400">
@@ -144,7 +145,7 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
               {categories.map((category) => (
               <View
                 key={category.id}
-                className="rounded-lg border border-gray-200 p-3 dark:border-gray-600"
+                className="rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-600 dark:bg-gray-800"
               >
                 {editingCategory?.id === category.id ? (
                   <View className="space-y-3">
@@ -163,16 +164,16 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
                       <View className="flex-row flex-wrap gap-2">
                         {iconOptions.map((option) => (
                           <Pressable
-                            key={option.emoji}
-                            onPress={() => setEditIcon(option.emoji)}
-                            className={`rounded-lg p-2 ${
-                              editIcon === option.emoji
-                                ? 'bg-blue-100 dark:bg-blue-900/30'
-                                : 'bg-gray-100 dark:bg-gray-700'
+                            key={option.key}
+                            onPress={() => setEditIcon(option.key)}
+                            className={`rounded-lg p-2 border ${
+                              editIcon === option.key || editIcon === option.emoji
+                                ? 'bg-blue-100 dark:bg-blue-900/30 border-blue-500 dark:border-blue-400'
+                                : 'bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600'
                             }`}
                           >
                             <option.component 
-                              color={editIcon === option.emoji ? '#3b82f6' : '#6b7280'} 
+                              color={editIcon === option.key || editIcon === option.emoji ? '#3b82f6' : '#6b7280'} 
                               size={20} 
                             />
                           </Pressable>

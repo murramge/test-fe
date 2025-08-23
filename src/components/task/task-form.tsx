@@ -225,7 +225,7 @@ export function TaskForm({
         title="새 카테고리 추가"
         snapPoints={['70%']}
       >
-        <View className="flex-1 p-4">
+        <View className="flex-1 bg-white p-4 dark:bg-gray-900">
           <View className="space-y-6">
             {/* 카테고리 이름 */}
             <View>

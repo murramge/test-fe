@@ -94,17 +94,7 @@ export function ProductivityMetrics({ stats, previousStats }: Props) {
 
       {/* 세부 지표들 */}
       <View style={{ flexDirection: 'row', gap: 8 }}>
-        <View style={{ 
-          flex: 1, 
-          backgroundColor: 'white',
-          borderRadius: 12,
-          padding: 10,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 8,
-          elevation: 3,
-        }}>
+        <View className="flex-1 bg-white dark:bg-neutral-800 rounded-xl p-3 shadow-sm">
           <View style={{ alignItems: 'center' }}>
             <View style={{
               marginBottom: 6,
@@ -117,37 +107,17 @@ export function ProductivityMetrics({ stats, previousStats }: Props) {
             }}>
               <Check color="#16a34a" size={16} />
             </View>
-            <Text style={{
-              fontSize: 18,
-              fontWeight: 'bold',
-              color: '#111827',
-              marginBottom: 2,
-            }}>
+            <Text className="text-lg font-bold text-gray-900 dark:text-white mb-1">
               {stats.completed}
             </Text>
-            <Text style={{
-              fontSize: 10,
-              color: '#6B7280',
-              textAlign: 'center',
-              marginBottom: 2,
-            }}>
+            <Text className="text-xs text-gray-600 dark:text-gray-400 text-center mb-1">
               완료된 할일
             </Text>
             <TrendIndicator trend={tasksTrend} />
           </View>
         </View>
 
-        <View style={{ 
-          flex: 1, 
-          backgroundColor: 'white',
-          borderRadius: 12,
-          padding: 10,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 8,
-          elevation: 3,
-        }}>
+        <View className="flex-1 bg-white dark:bg-neutral-800 rounded-xl p-3 shadow-sm">
           <View style={{ alignItems: 'center' }}>
             <View style={{
               marginBottom: 6,
@@ -160,35 +130,16 @@ export function ProductivityMetrics({ stats, previousStats }: Props) {
             }}>
               <Clock color="#ea580c" size={16} />
             </View>
-            <Text style={{
-              fontSize: 18,
-              fontWeight: 'bold',
-              color: '#111827',
-              marginBottom: 2,
-            }}>
+            <Text className="text-lg font-bold text-gray-900 dark:text-white mb-1">
               {stats.pending}
             </Text>
-            <Text style={{
-              fontSize: 10,
-              color: '#6B7280',
-              textAlign: 'center',
-            }}>
+            <Text className="text-xs text-gray-600 dark:text-gray-400 text-center">
               진행 중
             </Text>
           </View>
         </View>
 
-        <View style={{ 
-          flex: 1, 
-          backgroundColor: 'white',
-          borderRadius: 12,
-          padding: 10,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 8,
-          elevation: 3,
-        }}>
+        <View className="flex-1 bg-white dark:bg-neutral-800 rounded-xl p-3 shadow-sm">
           <View style={{ alignItems: 'center' }}>
             <View style={{
               marginBottom: 6,
@@ -201,19 +152,10 @@ export function ProductivityMetrics({ stats, previousStats }: Props) {
             }}>
               <Chart color="#2563eb" size={16} />
             </View>
-            <Text style={{
-              fontSize: 18,
-              fontWeight: 'bold',
-              color: '#111827',
-              marginBottom: 2,
-            }}>
+            <Text className="text-lg font-bold text-gray-900 dark:text-white mb-1">
               {stats.total}
             </Text>
-            <Text style={{
-              fontSize: 10,
-              color: '#6B7280',
-              textAlign: 'center',
-            }}>
+            <Text className="text-xs text-gray-600 dark:text-gray-400 text-center">
               전체 할일
             </Text>
           </View>
@@ -221,51 +163,25 @@ export function ProductivityMetrics({ stats, previousStats }: Props) {
       </View>
 
       {/* 생산성 인사이트 */}
-      <View style={{
-        backgroundColor: 'white',
-        borderRadius: 12,
-        padding: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 3,
-      }}>
+      <View className="bg-white dark:bg-neutral-800 rounded-xl p-3 shadow-sm">
         <View style={{
           flexDirection: 'row',
           alignItems: 'center',
           marginBottom: 8,
         }}>
           <Lightbulb color="#eab308" size={16} />
-          <Text style={{
-            fontSize: 16,
-            fontWeight: '600',
-            color: '#111827',
-            marginLeft: 6,
-          }}>
+          <Text className="text-base font-semibold text-gray-900 dark:text-white ml-2">
             생산성 인사이트
           </Text>
         </View>
         
         <View style={{ gap: 6 }}>
           {stats.byCategory.length > 0 && (
-            <View style={{
-              backgroundColor: '#F8FAFC',
-              borderRadius: 8,
-              padding: 8,
-            }}>
-              <Text style={{
-                fontSize: 12,
-                fontWeight: '500',
-                color: '#111827',
-                marginBottom: 2,
-              }}>
+            <View className="bg-gray-50 dark:bg-neutral-700 rounded-lg p-2">
+              <Text className="text-xs font-medium text-gray-900 dark:text-white mb-1">
                 가장 활발한 카테고리
               </Text>
-              <Text style={{
-                fontSize: 10,
-                color: '#6B7280',
-              }}>
+              <Text className="text-xs text-gray-600 dark:text-gray-400">
                 {stats.byCategory.sort((a, b) => b.completed - a.completed)[0]?.categoryName} (
                 {stats.byCategory.sort((a, b) => b.completed - a.completed)[0]?.completed}개 완료)
               </Text>
@@ -273,23 +189,11 @@ export function ProductivityMetrics({ stats, previousStats }: Props) {
           )}
           
           {stats.byPriority.length > 0 && (
-            <View style={{
-              backgroundColor: '#F8FAFC',
-              borderRadius: 8,
-              padding: 8,
-            }}>
-              <Text style={{
-                fontSize: 12,
-                fontWeight: '500',
-                color: '#111827',
-                marginBottom: 2,
-              }}>
+            <View className="bg-gray-50 dark:bg-neutral-700 rounded-lg p-2">
+              <Text className="text-xs font-medium text-gray-900 dark:text-white mb-1">
                 우선순위별 완료율
               </Text>
-              <Text style={{
-                fontSize: 10,
-                color: '#6B7280',
-              }}>
+              <Text className="text-xs text-gray-600 dark:text-gray-400">
                 높음: {stats.byPriority.find(p => p.priority === 'high')?.completed || 0}개, 
                 보통: {stats.byPriority.find(p => p.priority === 'medium')?.completed || 0}개, 
                 낮음: {stats.byPriority.find(p => p.priority === 'low')?.completed || 0}개

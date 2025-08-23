@@ -1,11 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { Env } from '@env';
 import { useColorScheme } from 'nativewind';
 
-import { CategoryItem } from '@/components/settings/category-item';
 import { Item } from '@/components/settings/item';
 import { ItemsContainer } from '@/components/settings/items-container';
-import { LanguageItem } from '@/components/settings/language-item';
 import { ThemeItem } from '@/components/settings/theme-item';
 import {
   colors,
@@ -14,8 +11,9 @@ import {
   Text,
   View,
 } from '@/components/ui';
-import { Github, Rate, Share, Support, Website } from '@/components/ui/icons';
-import { translate, useAuth } from '@/lib';
+import { Github } from '@/components/ui/icons';
+import { useAuth } from '@/lib';
+import { Linking } from 'react-native';
 
 export default function Settings() {
   const signOut = useAuth.use.signOut();
@@ -27,57 +25,30 @@ export default function Settings() {
       <FocusAwareStatusBar />
 
       <ScrollView>
-        <View className="flex-1 px-4 pt-16 ">
-          <Text className="text-xl font-bold">
-            {translate('settings.title')}
+        <View className="flex-1 px-4 pt-16">
+          <Text className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+            설정
           </Text>
-          <ItemsContainer title="settings.generale">
-            <LanguageItem />
+          
+          <ItemsContainer title="일반">
             <ThemeItem />
-            <CategoryItem />
           </ItemsContainer>
 
-          <ItemsContainer title="settings.about">
-            <Item text="settings.app_name" value={Env.NAME} />
-            <Item text="settings.version" value={Env.VERSION} />
+          <ItemsContainer title="앱 정보">
+            <Item text="앱 이름" value="TaskFlow" />
           </ItemsContainer>
 
-          <ItemsContainer title="settings.support_us">
+          <ItemsContainer title="링크">
             <Item
-              text="settings.share"
-              icon={<Share color={iconColor} />}
-              onPress={() => {}}
-            />
-            <Item
-              text="settings.rate"
-              icon={<Rate color={iconColor} />}
-              onPress={() => {}}
-            />
-            <Item
-              text="settings.support"
-              icon={<Support color={iconColor} />}
-              onPress={() => {}}
-            />
-          </ItemsContainer>
-
-          <ItemsContainer title="settings.links">
-            <Item text="settings.privacy" onPress={() => {}} />
-            <Item text="settings.terms" onPress={() => {}} />
-            <Item
-              text="settings.github"
+              text="GitHub"
               icon={<Github color={iconColor} />}
-              onPress={() => {}}
-            />
-            <Item
-              text="settings.website"
-              icon={<Website color={iconColor} />}
-              onPress={() => {}}
+              onPress={() => Linking.openURL('https://github.com/murramge/test-fe')}
             />
           </ItemsContainer>
 
-          <View className="my-8">
+          <View className="mt-6 mb-4">
             <ItemsContainer>
-              <Item text="settings.logout" onPress={signOut} />
+              <Item text="로그아웃" onPress={signOut} />
             </ItemsContainer>
           </View>
         </View>

@@ -117,19 +117,10 @@ export function ProductivityPattern({ tasks }: Props) {
       </View>
 
       {/* 요일별 분석 */}
-      <View style={{
-        backgroundColor: 'white',
-        borderRadius: 12,
-        padding: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 3,
-      }}>
+      <View className="bg-white dark:bg-neutral-800 rounded-xl p-3 shadow-sm">
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
           <ChartBar color="#111827" size={18} />
-          <Text style={{ marginLeft: 6, fontSize: 16, fontWeight: '600', color: '#111827' }}>
+          <Text className="ml-2 text-base font-semibold text-gray-900 dark:text-white">
             요일별 완료 패턴
           </Text>
         </View>
@@ -137,34 +128,18 @@ export function ProductivityPattern({ tasks }: Props) {
         <View style={{ gap: 6 }}>
           {patternData.weekdays.map((item) => (
             <View key={item.day} style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{
-                width: 24,
-                fontSize: 12,
-                fontWeight: '500',
-                color: '#374151',
-              }}>
+              <Text className="w-6 text-xs font-medium text-gray-700 dark:text-gray-300">
                 {item.day}
               </Text>
               <View style={{ flex: 1, marginHorizontal: 8 }}>
-                <View style={{
-                  height: 6,
-                  backgroundColor: '#E5E7EB',
-                  borderRadius: 3,
-                }}>
-                  <View style={{
-                    height: 6,
-                    backgroundColor: '#3B82F6',
-                    borderRadius: 3,
-                    width: `${item.percentage}%`,
-                  }} />
+                <View className="h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full">
+                  <View 
+                    className="h-1.5 bg-blue-500 rounded-full"
+                    style={{ width: `${item.percentage}%` }}
+                  />
                 </View>
               </View>
-              <Text style={{
-                width: 24,
-                fontSize: 12,
-                color: '#6B7280',
-                textAlign: 'right',
-              }}>
+              <Text className="w-6 text-xs text-gray-600 dark:text-gray-400 text-right">
                 {item.count}
               </Text>
             </View>
@@ -173,28 +148,14 @@ export function ProductivityPattern({ tasks }: Props) {
       </View>
 
       {/* 시간대별 분석 */}
-      <View style={{
-        backgroundColor: 'white',
-        borderRadius: 12,
-        padding: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 3,
-      }}>
+      <View className="bg-white dark:bg-neutral-800 rounded-xl p-3 shadow-sm">
         <View style={{
           flexDirection: 'row',
           alignItems: 'center',
           marginBottom: 8,
         }}>
           <Clock color="#6366f1" size={16} />
-          <Text style={{
-            fontSize: 16,
-            fontWeight: '600',
-            color: '#111827',
-            marginLeft: 6,
-          }}>
+          <Text className="text-base font-semibold text-gray-900 dark:text-white ml-2">
             시간대별 완료 패턴
           </Text>
         </View>
@@ -202,34 +163,18 @@ export function ProductivityPattern({ tasks }: Props) {
         <View style={{ gap: 6 }}>
           {patternData.timeSlots.map((item) => (
             <View key={item.slot} style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{
-                width: 60,
-                fontSize: 12,
-                fontWeight: '500',
-                color: '#374151',
-              }}>
+              <Text className="w-15 text-xs font-medium text-gray-700 dark:text-gray-300">
                 {item.slot}
               </Text>
               <View style={{ flex: 1, marginHorizontal: 8 }}>
-                <View style={{
-                  height: 6,
-                  backgroundColor: '#E5E7EB',
-                  borderRadius: 3,
-                }}>
-                  <View style={{
-                    height: 6,
-                    backgroundColor: '#10B981',
-                    borderRadius: 3,
-                    width: `${item.percentage}%`,
-                  }} />
+                <View className="h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full">
+                  <View 
+                    className="h-1.5 bg-green-500 rounded-full"
+                    style={{ width: `${item.percentage}%` }}
+                  />
                 </View>
               </View>
-              <Text style={{
-                width: 24,
-                fontSize: 12,
-                color: '#6B7280',
-                textAlign: 'right',
-              }}>
+              <Text className="w-6 text-xs text-gray-600 dark:text-gray-400 text-right">
                 {item.count}
               </Text>
             </View>

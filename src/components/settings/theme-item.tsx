@@ -4,7 +4,7 @@ import type { OptionType } from '@/components/ui';
 import { Options, useModal } from '@/components/ui';
 import { Moon, Sun, System } from '@/components/ui/icons';
 import type { ColorSchemeType } from '@/lib';
-import { translate, useSelectedTheme } from '@/lib';
+import { useSelectedTheme } from '@/lib';
 
 import { Item } from './item';
 
@@ -23,17 +23,17 @@ export const ThemeItem = () => {
   const themes = React.useMemo(
     () => [
       { 
-        label: translate('settings.theme.dark'), 
+        label: '다크 모드', 
         value: 'dark',
         icon: Moon
       },
       { 
-        label: translate('settings.theme.light'), 
+        label: '라이트 모드', 
         value: 'light',
         icon: Sun
       },
       { 
-        label: translate('settings.theme.system'), 
+        label: '시스템 설정', 
         value: 'system',
         icon: System
       },
@@ -49,7 +49,7 @@ export const ThemeItem = () => {
   return (
     <>
       <Item
-        text="settings.theme.title"
+        text="테마"
         value={theme?.label}
         onPress={modal.present}
       />

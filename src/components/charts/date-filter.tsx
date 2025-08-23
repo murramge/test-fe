@@ -18,23 +18,8 @@ export function DateFilter({ selectedRange, onRangeChange }: Props) {
   ];
 
   return (
-    <View style={{
-      backgroundColor: 'white',
-      borderRadius: 12,
-      padding: 10,
-      marginHorizontal: 0,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 8,
-      elevation: 3,
-    }}>
-      <Text style={{
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#111827',
-        marginBottom: 8,
-      }}>
+    <View className="bg-white dark:bg-neutral-800 rounded-xl p-3 shadow-sm">
+      <Text className="text-base font-semibold text-gray-900 dark:text-white mb-2">
         기간 선택
       </Text>
       
@@ -46,27 +31,21 @@ export function DateFilter({ selectedRange, onRangeChange }: Props) {
           <Pressable
             key={option.value}
             onPress={() => onRangeChange(option.value)}
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              borderRadius: 8,
-              paddingHorizontal: 8,
-              paddingVertical: 10,
-              backgroundColor: selectedRange === option.value ? '#3B82F6' : '#F8FAFC',
-              borderWidth: selectedRange === option.value ? 0 : 1,
-              borderColor: '#E2E8F0',
-            }}
+            className={`flex-1 items-center rounded-lg px-2 py-2.5 ${
+              selectedRange === option.value 
+                ? 'bg-blue-500' 
+                : 'bg-gray-50 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600'
+            }`}
           >
             <option.icon 
-              color={selectedRange === option.value ? 'white' : '#475569'} 
+              color={selectedRange === option.value ? 'white' : '#6B7280'} 
               size={18} 
             />
-            <Text style={{
-              fontSize: 12,
-              fontWeight: '600',
-              color: selectedRange === option.value ? 'white' : '#475569',
-              marginTop: 4,
-            }}>
+            <Text className={`text-xs font-semibold mt-1 ${
+              selectedRange === option.value 
+                ? 'text-white' 
+                : 'text-gray-600 dark:text-gray-300'
+            }`}>
               {option.label}
             </Text>
           </Pressable>
