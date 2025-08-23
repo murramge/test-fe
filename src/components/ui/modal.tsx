@@ -42,6 +42,7 @@ import { Text } from './text';
 
 type ModalProps = BottomSheetModalProps & {
   title?: string;
+  onDismiss?: () => void;
 };
 
 type ModalRef = React.ForwardedRef<BottomSheetModal>;
@@ -68,6 +69,7 @@ export const Modal = React.forwardRef(
       snapPoints: _snapPoints = ['60%'],
       title,
       detached = false,
+      onDismiss,
       ...props
     }: ModalProps,
     ref: ModalRef
@@ -103,9 +105,9 @@ export const Modal = React.forwardRef(
         snapPoints={snapPoints}
         backdropComponent={props.backdropComponent || renderBackdrop}
         enableDynamicSizing={false}
-        handleComponent={renderHandleComponent}
-        backgroundStyle={{ backgroundColor: 'transparent' }}
         handleIndicatorStyle={{ backgroundColor: '#6B7280' }}
+        handleComponent={renderHandleComponent}
+        onDismiss={onDismiss}
       />
     );
   }
@@ -157,9 +159,9 @@ const getDetachedProps = (detached: boolean) => {
  * ModalHeader
  */
 
-const ModalHeader = React.memo(({ title, dismiss }: ModalHeaderProps) => {
+const ModalHeader = React.memo(({ title }: ModalHeaderProps) => {
   return (
-    <View className="bg-white dark:bg-gray-900">
+    <View >
       {title && (
         <View className="flex-row px-2 py-4">
           <View className="size-[24px]" />
@@ -170,30 +172,8 @@ const ModalHeader = React.memo(({ title, dismiss }: ModalHeaderProps) => {
           </View>
         </View>
       )}
-      <CloseButton close={dismiss} />
+  
     </View>
   );
 });
 
-const CloseButton = ({ close }: { close: () => void }) => {
-  return (
-    <Pressable
-      onPress={close}
-      className="absolute right-3 top-3 size-[24px] items-center justify-center "
-      hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-      accessibilityLabel="close modal"
-      accessibilityRole="button"
-      accessibilityHint="closes the modal"
-    >
-      <Svg
-        className="fill-neutral-300 dark:fill-white"
-        width={24}
-        height={24}
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <Path d="M18.707 6.707a1 1 0 0 0-1.414-1.414L12 10.586 6.707 5.293a1 1 0 0 0-1.414 1.414L10.586 12l-5.293 5.293a1 1 0 1 0 1.414 1.414L12 13.414l5.293 5.293a1 1 0 0 0 1.414-1.414L13.414 12l5.293-5.293Z" />
-      </Svg>
-    </Pressable>
-  );
-};

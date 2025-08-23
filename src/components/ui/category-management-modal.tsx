@@ -130,7 +130,7 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
       ref={modal.ref} 
       title="카테고리 관리"
       snapPoints={['70%']}
-      
+      onDismiss={onClose}
     >
       <View className="flex-1 bg-white p-6 dark:bg-gray-900">
         {categories.length === 0 ? (

@@ -193,8 +193,8 @@ export function TaskForm({
                 size="sm"
               >
                 <View className="flex-row items-center">
-                  <IconComponent size={14} color={selectedCategoryId === category.id ? '#ffffff' : (category.color || '#6b7280')} />
-                  <Text className={`ml-2 text-sm ${selectedCategoryId === category.id ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                  <IconComponent size={14} color={category.color} />
+                  <Text className={`ml-2 text-sm ${selectedCategoryId === category.id ? 'text-white dark:text-gray-900' : 'text-gray-900 dark:text-white'}`}>
                     {category.name}
                   </Text>
                 </View>
