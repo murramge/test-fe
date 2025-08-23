@@ -42,8 +42,8 @@ export function PriorityChart({ stats }: Props) {
                 {/* Priority header */}
                 <View className="flex-row items-center justify-between">
                   <View className="flex-row items-center space-x-2">
-                    <Text className="text-base">{config.emoji}</Text>
-                    <Text className="font-medium text-gray-900 dark:text-white">
+                    <Text className="text-base px-1">{config.emoji}</Text>
+                    <Text className="text-md text-gray-900 dark:text-white py-3">
                       {config.label}
                     </Text>
                   </View>

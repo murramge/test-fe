@@ -1,5 +1,5 @@
-import { Link } from 'expo-router';
-import {   useEffect, useState } from 'react';
+import { Link, useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { Pressable } from 'react-native';
 
 import { TaskList } from '@/components/task/task-list';
@@ -23,6 +23,7 @@ function TasksContent() {
   const { loadData, toggleTaskStatus } = useTaskStore();
   const { categories } = useCategories();
   const stats = useTaskStats();
+  const { categoryId } = useLocalSearchParams();
   const [filters, setFilters] = useState<TaskFilters>({});
   const [showFilters, setShowFilters] = useState(true);
 
@@ -31,6 +32,25 @@ function TasksContent() {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  // 화면 포커스 시 필터 초기화 (URL 파라미터가 없는 경우만)
+  useFocusEffect(
+    useCallback(() => {
+      // URL에 categoryId가 없으면 필터 초기화
+      if (!categoryId) {
+        setFilters({});
+        setShowFilters(true);
+      }
+    }, [categoryId])
+  );
+
+  // URL에서 카테고리 ID가 전달된 경우 초기 필터 설정
+  useEffect(() => {
+    if (categoryId && typeof categoryId === 'string') {
+      setFilters({ categoryId: categoryId });
+      setShowFilters(true); // 필터가 적용된 경우 필터 섹션을 보여줌
+    }
+  }, [categoryId]);
 
 
 
@@ -41,27 +61,50 @@ function TasksContent() {
       {/* 고정 헤더 */}
       <View className="bg-white dark:bg-neutral-800 border-b border-gray-200 dark:border-gray-700">
         {/* 상단 헤더 */}
-        <View className="px-6 py-4">
+        <View className="px-4 py-3">
           <View className="flex-row items-center justify-between">
             <View>
-              <Text className="text-2xl font-bold text-gray-900 dark:text-white">
-                할일 관리
-              </Text>
-              <Text className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                총 {stats?.total || 0}개 • 완료 {stats?.completed || 0}개 • 진행 중 {stats?.pending || 0}개
-              </Text>
+              {filters.categoryId ? (
+                <View>
+                  <Text className="text-xl font-bold text-gray-900 dark:text-white">
+                    {categories.find(cat => cat.id === filters.categoryId)?.icon} {categories.find(cat => cat.id === filters.categoryId)?.name || '할일 관리'}
+                  </Text>
+                  <Text className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                    이 카테고리의 할일 • 총 {tasks.length}개
+                  </Text>
+                </View>
+              ) : (
+                <View>
+                  <Text className="text-xl font-bold text-gray-900 dark:text-white">
+                    할일 관리
+                  </Text>
+                  <Text className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                    총 {stats?.total || 0}개 • 완료 {stats?.completed || 0}개 • 진행 중 {stats?.pending || 0}개
+                  </Text>
+                </View>
+              )}
             </View>
             
-            <View className="flex-row space-x-2">
+            <View className="flex-row" style={{ gap: 6 }}>
+              {filters.categoryId && (
+                <Pressable
+                  onPress={() => setFilters({})}
+                  className="rounded-full bg-green-100 px-2 py-1 dark:bg-green-900/30"
+                >
+                  <Text className="text-xs font-medium text-green-700 dark:text-green-300">
+                    🔄 전체보기
+                  </Text>
+                </Pressable>
+              )}
               <Pressable
                 onPress={() => setShowFilters(!showFilters)}
-                className={`rounded-full px-3 py-2 ${
+                className={`rounded-full px-2 py-1 ${
                   showFilters 
                     ? 'bg-blue-100 dark:bg-blue-900/30' 
                     : 'bg-gray-100 dark:bg-gray-700'
                 }`}
               >
-                <Text className={`text-sm font-medium ${
+                <Text className={`text-xs font-medium ${
                   showFilters 
                     ? 'text-blue-700 dark:text-blue-300' 
                     : 'text-gray-700 dark:text-gray-300'
@@ -73,37 +116,33 @@ function TasksContent() {
           </View>
           
           {/* 통계 탭 */}
-          
-          <View className="mt-4 flex-row rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
-         
-          <Pressable className={`flex-1 items-center rounded-lg py-3  `} onPress={() => setFilters({})}>
-            <Text className={`text-lg font-bold text-blue-500`}>
-              {stats?.total || 0}
-            </Text>
-            <Text className={`text-xs font-medium `}>
-              전체
-            </Text>
-          </Pressable>          
-     
-            <Pressable className={`flex-1 items-center rounded-lg py-3 mx-1 `} onPress={() => setFilters({status: ['pending']})}>
-            <Text className={`text-lg font-bold text-orange-500`}>
-              {stats?.pending || 0}
-            </Text>
-            <Text className={`text-xs font-medium `}>
-              진행중
-            </Text>
-          </Pressable>      
+          <View className="mt-3 flex-row rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
+            <Pressable className="flex-1 items-center rounded-md py-2" onPress={() => setFilters({})}>
+              <Text className="text-base font-bold text-blue-500">
+                {stats?.total || 0}
+              </Text>
+              <Text className="text-xs font-medium">
+                전체
+              </Text>
+            </Pressable>
+            
+            <Pressable className="flex-1 items-center rounded-md py-2" onPress={() => setFilters({status: ['pending']})}>
+              <Text className="text-base font-bold text-orange-500">
+                {stats?.pending || 0}
+              </Text>
+              <Text className="text-xs font-medium">
+                진행중
+              </Text>
+            </Pressable>
 
-  
-            <Pressable className={`flex-1 items-center rounded-lg py-3 `} onPress={() => setFilters({status: ['completed']})}>
-              <Text className={`text-lg font-bold text-green-500 `}>
+            <Pressable className="flex-1 items-center rounded-md py-2" onPress={() => setFilters({status: ['completed']})}>
+              <Text className="text-base font-bold text-green-500">
                 {stats?.completed || 0}
               </Text>
-              <Text className={`text-xs font-medium `}>
+              <Text className="text-xs font-medium">
                 완료
               </Text>
             </Pressable>
-  
           </View>
         </View>
 
@@ -111,14 +150,12 @@ function TasksContent() {
 
         {/* 필터 섹션 */}
         {showFilters && (
-          <View className="px-6  border-t border-gray-100 dark:border-gray-700">
-            <View>
-              <TaskFiltersComponent
-                filters={filters}
-                onFiltersChange={setFilters}
-                categories={categories}
-              />
-            </View>
+          <View className="px-4 py-2 border-t border-gray-100 dark:border-gray-700">
+            <TaskFiltersComponent
+              filters={filters}
+              onFiltersChange={setFilters}
+              categories={categories}
+            />
           </View>
         )}
       </View>

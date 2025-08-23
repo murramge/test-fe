@@ -35,7 +35,7 @@ export function CategoryChart({ stats }: Props) {
               <View key={category.categoryId} className="space-y-2">
                 {/* Category header */}
                 <View className="flex-row items-center justify-between">
-                  <Text className="font-medium text-gray-900 dark:text-white">
+                  <Text className="text-md text-gray-900 dark:text-white py-3">
                     {category.categoryName}
                   </Text>
                   <Text className="text-sm text-gray-600 dark:text-gray-400">

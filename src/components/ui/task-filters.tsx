@@ -64,9 +64,9 @@ export function TaskFiltersComponent({
     filters.status?.length || filters.priority?.length || filters.categoryId;
 
   return (
-    <View className="space-y-4 rounded-lg bg-white p-4 dark:bg-neutral-800">
+    <View style={{ gap: 12 }} className="rounded-lg bg-white p-3 dark:bg-neutral-800">
       <View className="flex-row items-center justify-between">
-        <Text className="text-lg font-semibold text-gray-900 dark:text-white">
+        <Text className="text-base font-semibold text-gray-900 dark:text-white">
           필터
         </Text>
         {hasActiveFilters && (
@@ -80,11 +80,11 @@ export function TaskFiltersComponent({
       </View>
 
       {/* Status Filter */}
-      <View className="space-y-2">
+      <View style={{ gap: 6 }}>
         <Text className="text-sm font-medium text-gray-700 dark:text-gray-300">
           상태
         </Text>
-        <View className="flex-row flex-wrap gap-2">
+        <View className="flex-row flex-wrap" style={{ gap: 6 }}>
           {statusOptions.map((option) => (
             <Button
               key={option.value}
@@ -100,11 +100,11 @@ export function TaskFiltersComponent({
       </View>
 
       {/* Priority Filter */}
-      <View className="space-y-2">
+      <View style={{ gap: 6 }}>
         <Text className="text-sm font-medium text-gray-700 dark:text-gray-300">
           우선순위
         </Text>
-        <View className="flex-row flex-wrap gap-2">
+        <View className="flex-row flex-wrap" style={{ gap: 6 }}>
           {priorityOptions.map((option) => (
             <Button
               key={option.value}
@@ -121,11 +121,11 @@ export function TaskFiltersComponent({
 
       {/* Category Filter */}
       {categories.length > 0 && (
-        <View className="space-y-2">
+        <View style={{ gap: 6 }}>
           <Text className="text-sm font-medium text-gray-700 dark:text-gray-300">
             카테고리
           </Text>
-          <View className="flex-row flex-wrap gap-2">
+          <View className="flex-row flex-wrap" style={{ gap: 6 }}>
             {categories.map((category) => (
               <Button
                 key={category.id}

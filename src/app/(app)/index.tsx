@@ -415,7 +415,7 @@ export default function Home() {
                     </View>
                     
                     <Pressable 
-                      onPress={() => router.push('/tasks')}
+                      onPress={() => router.push(`/tasks?categoryId=${category.id}`)}
                       className="rounded-lg bg-gray-100 px-3 py-1 dark:bg-gray-700"
                     >
                       <Text className="text-sm text-gray-600 dark:text-gray-300">

@@ -7,11 +7,17 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withRepeat,
+  withTiming,
+  Easing,
 } from 'react-native-reanimated';
 
 import { Text, View } from '@/components/ui';
 import { useTaskStore } from '@/lib/hooks';
 import type { TaskWithCategory } from '@/types';
+
+// 전역 상태로 사용자가 스와이프를 사용했는지 추적
+let hasUserSwiped = false;
 
 type Props = {
   task: TaskWithCategory;
@@ -29,12 +35,27 @@ export function TaskItem({
   const isCompleted = task.status === 'completed';
   const translateX = useSharedValue(0);
   const [isSwipeActionsVisible, setIsSwipeActionsVisible] = React.useState(false);
+  
+  // 스와이프 힌트 애니메이션
+  const swipeHintOpacity = useSharedValue(0.7);
+  
+  React.useEffect(() => {
+    if (!hasUserSwiped) {
+      swipeHintOpacity.value = withRepeat(
+        withTiming(1, { duration: 1500, easing: Easing.inOut(Easing.ease) }),
+        -1,
+        true
+      );
+    }
+  }, [swipeHintOpacity]);
+
 
   const handleEdit = () => {
     router.push(`/edit-task?taskId=${task.id}`);
     // 스와이프 액션 닫기
     translateX.value = withSpring(0);
     setIsSwipeActionsVisible(false);
+
   };
 
   const handleDelete = () => {
@@ -49,6 +70,7 @@ export function TaskItem({
             // 스와이프 액션 닫기
             translateX.value = withSpring(0);
             setIsSwipeActionsVisible(false);
+        
           },
         },
         {
@@ -58,11 +80,14 @@ export function TaskItem({
             deleteTask(task.id);
             translateX.value = withSpring(0);
             setIsSwipeActionsVisible(false);
+        
           },
         },
       ]
     );
   };
+
+
 
   const panGesture = Gesture.Pan()
     .onUpdate((event) => {
@@ -74,10 +99,12 @@ export function TaskItem({
 
       if (event.translationX < -threshold) {
         // 왼쪽으로 스와이프 - 액션 버튼 표시 (완료된 태스크도 포함)
+        hasUserSwiped = true; // 사용자가 스와이프를 사용했음을 기록
         translateX.value = withSpring(-140);
         runOnJS(setIsSwipeActionsVisible)(true);
       } else if (event.translationX > threshold && task.status !== 'completed') {
         // 오른쪽으로 스와이프 - 완료 토글 (미완료 태스크만)
+        hasUserSwiped = true; // 사용자가 스와이프를 사용했음을 기록
         if (onToggleStatus) {
           runOnJS(onToggleStatus)();
         }
@@ -87,7 +114,8 @@ export function TaskItem({
         translateX.value = withSpring(0);
         runOnJS(setIsSwipeActionsVisible)(false);
       }
-    });
+    })
+    .simultaneousWithExternalGesture();
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -113,6 +141,11 @@ export function TaskItem({
   // 애니메이션 스타일들
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
+  }));
+
+  // 스와이프 힌트 애니메이션 스타일
+  const swipeHintAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: swipeHintOpacity.value,
   }));
 
   const actionsStyle = useAnimatedStyle(() => ({
@@ -146,90 +179,112 @@ export function TaskItem({
       </Animated.View>
 
       {/* 메인 태스크 아이템 */}
-      <GestureDetector gesture={panGesture}>
-        <Animated.View style={[animatedStyle]}>
-          <Pressable onPress={onPress}>
-            <View className="rounded-lg bg-white p-4 shadow-sm dark:bg-neutral-800">
-              <View className="flex-row items-start justify-between">
-                {/* Task content */}
-                <View className="flex-1 pr-3">
-                  {/* Title and status */}
-                  <View className="flex-row items-center">
-                    <Pressable
-                      onPress={onToggleStatus}
-                      className={`mr-3 size-5 rounded-full border-2 ${
-                        isCompleted
-                          ? 'border-blue-500 bg-blue-500'
-                          : 'border-gray-300 dark:border-gray-600'
-                      }`}
-                    >
-                      {isCompleted && (
-                        <Text className="text-center text-xs text-white">✓</Text>
-                      )}
-                    </Pressable>
+      <View className="relative">
+        <GestureDetector gesture={panGesture}>
+          <Animated.View style={[animatedStyle]}>
+            <Pressable onPress={onPress}>
+              <View className="rounded-lg bg-white p-4 shadow-sm dark:bg-neutral-800">
+                <View className="flex-row items-start justify-between">
+                  {/* Task content */}
+                  <View className="flex-1 pr-3">
+                    {/* Title and status */}
+                    <View className="flex-row items-center">
+                      <Pressable
+                        onPress={onToggleStatus}
+                        className={`mr-3 size-5 rounded-full border-2 ${
+                          isCompleted
+                            ? 'border-blue-500 bg-blue-500'
+                            : 'border-gray-300 dark:border-gray-600'
+                        }`}
+                      >
+                        {isCompleted && (
+                          <Text className="text-center text-xs text-white">✓</Text>
+                        )}
+                      </Pressable>
 
-                    <Text
-                      className={`flex-1 text-base font-medium ${
-                        isCompleted
-                          ? 'text-gray-500 line-through dark:text-gray-400'
-                          : 'text-gray-900 dark:text-white'
-                      }`}
-                    >
-                      {task.title}
-                    </Text>
-                  </View>
+                      <Text
+                        className={`flex-1 text-base font-medium ${
+                          isCompleted
+                            ? 'text-gray-500 line-through dark:text-gray-400'
+                            : 'text-gray-900 dark:text-white'
+                        }`}
+                      >
+                        {task.title}
+                      </Text>
+                    </View>
 
-                  {/* Description */}
-                  {task.description && (
-                    <Text
-                      className={`ml-8 mt-1 text-sm ${
-                        isCompleted
-                          ? 'text-gray-400 dark:text-gray-500'
-                          : 'text-gray-600 dark:text-gray-300'
-                      }`}
-                    >
-                      {task.description}
-                    </Text>
-                  )}
-
-                  {/* Meta info */}
-                  <View className="ml-8 mt-2 flex-row items-center">
-                    {/* Priority indicator */}
-                    <View
-                      className={`mr-2 size-2 rounded-full ${getPriorityColor(
-                        task.priority
-                      )}`}
-                    />
-
-                    {/* Category */}
-                    {task.category && (
-                      <View className="mr-3 rounded-full bg-gray-100 px-2 py-1 dark:bg-gray-700">
-                        <Text className="text-xs text-gray-600 dark:text-gray-300">
-                          {task.category.icon} {task.category.name}
-                        </Text>
-                      </View>
-                    )}
-
-                    {/* Due date */}
-                    {task.dueDate && (
-                      <Text className="text-xs text-gray-500 dark:text-gray-400">
-                        {formatDate(task.dueDate)}
+                    {/* Description */}
+                    {task.description && (
+                      <Text
+                        className={`ml-8 mt-1 text-sm ${
+                          isCompleted
+                            ? 'text-gray-400 dark:text-gray-500'
+                            : 'text-gray-600 dark:text-gray-300'
+                        }`}
+                      >
+                        {task.description}
                       </Text>
                     )}
-                  </View>
-                </View>
 
-                {/* 스와이프 힌트 (모든 태스크) */}
-                <View className="ml-2 items-center justify-center">
-                  <View className="size-1 rounded-full bg-gray-300 dark:bg-gray-600" />
-                  <View className="my-1 size-1 rounded-full bg-gray-300 dark:bg-gray-600" />
-                  <View className="size-1 rounded-full bg-gray-300 dark:bg-gray-600" />
+                    {/* Meta info */}
+                    <View className="ml-8 mt-2 flex-row items-center">
+                      {/* Priority indicator */}
+                      <View
+                        className={`mr-2 size-2 rounded-full ${getPriorityColor(
+                          task.priority
+                        )}`}
+                      />
+
+                      {/* Category */}
+                      {task.category && (
+                        <View className="mr-3 rounded-full bg-gray-100 px-2 py-1 dark:bg-gray-700">
+                          <Text className="text-xs text-gray-600 dark:text-gray-300">
+                            {task.category.icon} {task.category.name}
+                          </Text>
+                        </View>
+                      )}
+
+                      {/* Due date */}
+                      {task.dueDate && (
+                        <Text className="text-xs text-gray-500 dark:text-gray-400">
+                          {formatDate(task.dueDate)}
+                        </Text>
+                      )}
+                    </View>
+                  </View>
+
+                  {/* 빈 공간 - 액션 버튼을 위한 자리 */}
+                  <View className="w-10" />
                 </View>
               </View>
+            </Pressable>
+          </Animated.View>
+        </GestureDetector>
+
+        {/* 스와이프 힌트 아이콘 */}
+        {!hasUserSwiped && (
+          <Animated.View 
+            style={[
+              animatedStyle,
+              swipeHintAnimatedStyle,
+              {
+                position: 'absolute',
+                right: 12,
+                top: '50%',
+                transform: [{ translateY: -12 }],
+              }
+            ]}
+          >
+            <View className="rounded-md bg-gray-100 px-2 py-1 dark:bg-gray-800">
+              <Text className="text-gray-400 dark:text-gray-500" style={{ fontSize: 12 }}>
+                ››
+              </Text>
             </View>
-          </Pressable>
-        </Animated.View>
-      </GestureDetector>
+          </Animated.View>
+        )}
+      </View>
+
+
     </View>
   );
 }
