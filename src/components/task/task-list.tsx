@@ -2,6 +2,7 @@ import { FlashList } from '@shopify/flash-list';
 import * as React from 'react';
 
 import { EmptyList, Text, View } from '@/components/ui';
+import { Document } from '@/components/ui/icons';
 import type { TaskFilters, TaskWithCategory } from '@/types';
 
 import { TaskItem } from './task-item';
@@ -38,7 +39,7 @@ export function TaskList({
 
     return (
       <View className="flex-1 items-center justify-center p-8">
-        <Text className="text-6xl">📝</Text>
+        <Document color="#9CA3AF" size={72} />
         <Text className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
           할일이 없습니다
         </Text>

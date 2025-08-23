@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { Text, View } from 'react-native';
+import { ChartBar, Clock } from '@/components/ui/icons';
 import type { Task } from '@/types';
 
 type Props = {
@@ -83,13 +84,20 @@ export function ProductivityPattern({ tasks }: Props) {
         shadowRadius: 12,
         elevation: 8,
       }}>
-        <Text style={{
-          fontSize: 18,
-          fontWeight: '600',
-          color: 'white',
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
         }}>
-          🎯 나의 생산성 패턴
-        </Text>
+          <ChartBar color="white" size={18} />
+          <Text style={{
+            fontSize: 18,
+            fontWeight: '600',
+            color: 'white',
+            marginLeft: 6,
+          }}>
+            나의 생산성 패턴
+          </Text>
+        </View>
         <View style={{ marginTop: 6, gap: 2 }}>
           <Text style={{
             fontSize: 12,
@@ -119,14 +127,12 @@ export function ProductivityPattern({ tasks }: Props) {
         shadowRadius: 8,
         elevation: 3,
       }}>
-        <Text style={{
-          fontSize: 16,
-          fontWeight: '600',
-          color: '#111827',
-          marginBottom: 8,
-        }}>
-          📊 요일별 완료 패턴
-        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+          <ChartBar color="#111827" size={18} />
+          <Text style={{ marginLeft: 6, fontSize: 16, fontWeight: '600', color: '#111827' }}>
+            요일별 완료 패턴
+          </Text>
+        </View>
         
         <View style={{ gap: 6 }}>
           {patternData.weekdays.map((item) => (
@@ -177,14 +183,21 @@ export function ProductivityPattern({ tasks }: Props) {
         shadowRadius: 8,
         elevation: 3,
       }}>
-        <Text style={{
-          fontSize: 16,
-          fontWeight: '600',
-          color: '#111827',
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
           marginBottom: 8,
         }}>
-          🕐 시간대별 완료 패턴
-        </Text>
+          <Clock color="#6366f1" size={16} />
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '600',
+            color: '#111827',
+            marginLeft: 6,
+          }}>
+            시간대별 완료 패턴
+          </Text>
+        </View>
         
         <View style={{ gap: 6 }}>
           {patternData.timeSlots.map((item) => (

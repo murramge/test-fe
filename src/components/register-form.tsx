@@ -8,6 +8,7 @@ import TeamSkyIcon from "/assets/teamsky-icon.png"
 
 import { Button, ControlledInput, Image, Pressable, Text, View } from '@/components/ui';
 import { registerSchema, type RegisterFormType } from '@/lib/validation/auth-schemas';
+import { Rocket } from './ui/icons';
 
 export type RegisterFormProps = {
   onSubmit?: SubmitHandler<RegisterFormType>;
@@ -35,10 +36,17 @@ export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
           </Text>
 
 
-          <Text className="mb-6 max-w-sm text-center text-gray-600 dark:text-gray-400">
-            TaskFlow와 함께 생산적인 하루를 시작하세요! 🚀
-            {'\n'}간단한 정보 입력으로 가입할 수 있습니다.
-          </Text>
+          <View className="mb-6 items-center">
+            <View className="flex-row items-center mb-2">
+              <Text className="text-center text-gray-600 dark:text-gray-400">
+                TaskFlow와 함께 생산적인 하루를 시작하세요!
+              </Text>
+         
+            </View>
+            <Text className="text-center text-gray-600 dark:text-gray-400">
+              간단한 정보 입력으로 가입할 수 있습니다.
+            </Text>
+          </View>
         </View>
 
         <ControlledInput

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Pressable, Text, View } from 'react-native';
+import { Calendar, ChartBar, ChartLine } from '@/components/ui/icons';
 
 export type DateRange = '7days' | '30days' | '90days' | 'all';
 
@@ -9,11 +10,11 @@ type Props = {
 };
 
 export function DateFilter({ selectedRange, onRangeChange }: Props) {
-  const filterOptions: { value: DateRange; label: string; emoji: string }[] = [
-    { value: '7days', label: '7일', emoji: '📅' },
-    { value: '30days', label: '30일', emoji: '📊' },
-    { value: '90days', label: '90일', emoji: '📈' },
-    { value: 'all', label: '전체', emoji: '🗓️' },
+  const filterOptions: { value: DateRange; label: string; icon: React.ComponentType<{color?: string; size?: number}> }[] = [
+    { value: '7days', label: '7일', icon: Calendar },
+    { value: '30days', label: '30일', icon: ChartBar },
+    { value: '90days', label: '90일', icon: ChartLine },
+    { value: 'all', label: '전체', icon: Calendar },
   ];
 
   return (
@@ -56,11 +57,15 @@ export function DateFilter({ selectedRange, onRangeChange }: Props) {
               borderColor: '#E2E8F0',
             }}
           >
-            <Text style={{ fontSize: 16, marginBottom: 2 }}>{option.emoji}</Text>
+            <option.icon 
+              color={selectedRange === option.value ? 'white' : '#475569'} 
+              size={18} 
+            />
             <Text style={{
               fontSize: 12,
               fontWeight: '600',
               color: selectedRange === option.value ? 'white' : '#475569',
+              marginTop: 4,
             }}>
               {option.label}
             </Text>

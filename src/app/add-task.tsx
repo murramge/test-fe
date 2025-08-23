@@ -6,6 +6,7 @@ import { showMessage } from 'react-native-flash-message';
 
 import { TaskForm } from '@/components/task/task-form';
 import { Button, FocusAwareStatusBar, ScrollView, Text, View } from '@/components/ui';
+import { Folder, Briefcase, Home, Target, Book, DollarSign, Activity, Palette, Lightning, Fire, Rocket, Lightbulb, Star, Trophy, Chart, ChartLine, Person } from '@/components/ui/icons';
 import { useCategories, useTaskStore } from '@/lib/hooks';
 import { taskFormSchema, type TaskFormType } from '@/lib/validation/task-schemas';
 
@@ -36,6 +37,31 @@ export default function AddTask() {
   
   // 선택된 카테고리 정보
   const selectedCategory = categories.find(cat => cat.id === selectedCategoryId);
+
+  // 카테고리 아이콘 컴포넌트 가져오기
+  const getCategoryIcon = (iconKey?: string) => {
+    const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
+      'folder': Folder,
+      'briefcase': Briefcase,
+      'home': Home,
+      'person': Person,
+      'target': Target,
+      'book': Book,
+      'dollar-sign': DollarSign,
+      'activity': Activity,
+      'palette': Palette,
+      'lightning': Lightning,
+      'fire': Fire,
+      'rocket': Rocket,
+      'lightbulb': Lightbulb,
+      'star': Star,
+      'trophy': Trophy,
+      'chart': Chart,
+      'chart-line': ChartLine,
+    };
+    
+    return iconMap[iconKey || 'folder'] || Folder;
+  };
 
   const onSubmit = (data: TaskFormType) => {
     addTask({
@@ -72,7 +98,10 @@ export default function AddTask() {
           {selectedCategory && categoryId && (
             <View className="mb-4 rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
               <View className="flex-row items-center">
-                <Text className="text-lg">{selectedCategory.icon}</Text>
+                {(() => {
+                  const IconComponent = getCategoryIcon(selectedCategory.icon);
+                  return <IconComponent size={20} color={selectedCategory.color || '#3b82f6'} />;
+                })()}
                 <Text className="ml-2 font-medium text-blue-800 dark:text-blue-200">
                   "{selectedCategory.name}" 카테고리에 할일을 추가합니다
                 </Text>

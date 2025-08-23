@@ -8,6 +8,7 @@ import { ProductivityMetrics } from '@/components/charts/productivity-metrics';
 import { ProductivityPattern } from '@/components/charts/productivity-pattern';
 import { ProgressRing } from '@/components/charts/progress-ring';
 import { FocusAwareStatusBar, ScrollView, Text, View } from '@/components/ui';
+import { ChartBar, ChartLine, Sparkles, Fire, Party, ThumbsUp } from '@/components/ui/icons';
 import { SafeAreaView } from 'react-native';
 import { useFilteredStats, useTaskStore } from '@/lib/hooks';
 
@@ -23,8 +24,8 @@ export default function Stats() {
   const getMotivationalMessage = () => {
     if (stats.total === 0) {
       return selectedRange === 'all' 
-        ? '첫 할일을 추가해보세요! 💪'
-        : '이 기간에는 할일이 없어요. 새로운 할일을 추가해보세요! 🌟';
+        ? '첫 할일을 추가해보세요!'
+        : '이 기간에는 할일이 없어요. 새로운 할일을 추가해보세요!';
     }
 
     const rangeText = {
@@ -35,13 +36,13 @@ export default function Stats() {
     }[selectedRange];
 
     if (stats.completionRate >= 80) {
-      return `${rangeText} 훌륭한 성과입니다! 🎉`;
+      return `${rangeText} 훌륭한 성과입니다!`;
     } else if (stats.completionRate >= 60) {
-      return `${rangeText} 좋은 진전이에요! 👍`;
+      return `${rangeText} 좋은 진전이에요!`;
     } else if (stats.completionRate >= 30) {
-      return `${rangeText} 계속 화이팅하세요! 🔥`;
+      return `${rangeText} 계속 화이팅하세요!`;
     } else {
-      return `${rangeText} 조금씩 시작해보세요! 🌟`;
+      return `${rangeText} 조금씩 시작해보세요!`;
     }
   };
 
@@ -53,7 +54,12 @@ export default function Stats() {
         {/* Header */}
         <View className="bg-blue-600 px-6 pb-8 pt-4">
           <Text className="text-3xl font-bold text-white">
-            생산성 대시보드 📊
+            <View className="flex-row items-center">
+              <Text className="text-3xl font-bold text-white mr-3">
+                생산성 대시보드
+              </Text>
+              <ChartBar color="white" size={28} />
+            </View>
           </Text>
           <Text className="mt-2 text-blue-100">
             {getMotivationalMessage()}
@@ -102,7 +108,12 @@ export default function Stats() {
                   color: '#111827',
                   marginBottom: 10,
                 }}>
-                  📈 전체 진행률
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                    <ChartLine color="#111827" size={18} />
+                    <Text style={{ marginLeft: 6, fontSize: 16, fontWeight: '600', color: '#111827' }}>
+                      전체 진행률
+                    </Text>
+                  </View>
                 </Text>
                 <View style={{ alignItems: 'center' }}>
                   <ProgressRing
@@ -175,7 +186,7 @@ export default function Stats() {
                 borderRadius: 30,
                 backgroundColor: '#3B82F6',
               }}>
-                <Text style={{ fontSize: 24 }}>📈</Text>
+                <ChartLine color="white" size={32} />
               </View>
               <Text style={{
                 fontSize: 18,

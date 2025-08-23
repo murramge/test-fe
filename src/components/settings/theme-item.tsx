@@ -2,6 +2,7 @@ import React from 'react';
 
 import type { OptionType } from '@/components/ui';
 import { Options, useModal } from '@/components/ui';
+import { Moon, Sun, System } from '@/components/ui/icons';
 import type { ColorSchemeType } from '@/lib';
 import { translate, useSelectedTheme } from '@/lib';
 
@@ -21,9 +22,21 @@ export const ThemeItem = () => {
 
   const themes = React.useMemo(
     () => [
-      { label: `${translate('settings.theme.dark')} 🌙`, value: 'dark' },
-      { label: `${translate('settings.theme.light')} 🌞`, value: 'light' },
-      { label: `${translate('settings.theme.system')} ⚙️`, value: 'system' },
+      { 
+        label: translate('settings.theme.dark'), 
+        value: 'dark',
+        icon: Moon
+      },
+      { 
+        label: translate('settings.theme.light'), 
+        value: 'light',
+        icon: Sun
+      },
+      { 
+        label: translate('settings.theme.system'), 
+        value: 'system',
+        icon: System
+      },
     ],
     []
   );

@@ -3,7 +3,7 @@ import { Link } from 'expo-router';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
-import TeamSkyIcon from "/assets/teamsky-icon.png"
+const TeamSkyIcon = require('../../assets/teamsky-icon.png');
 
 import { Button, ControlledInput, Image, Pressable, Text, View } from '@/components/ui';
 import { loginSchema, type LoginFormType } from '@/lib/validation/auth-schemas';
@@ -31,10 +31,13 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
           >
             TaskFlow
           </Text>
-          <Text className="mb-6 max-w-sm text-center text-gray-600 dark:text-gray-400">
-            직장인 할일 관리를 시작하세요! 💪
-           
-          </Text>
+                    <View className="mb-6 items-center">
+            <View className="flex-row items-center">
+              <Text className="text-center text-gray-600 dark:text-gray-400">
+                직장인 할일 관리를 시작하세요
+              </Text>
+            </View>
+          </View>
         </View>
 
         <ControlledInput

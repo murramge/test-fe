@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Text, View } from '@/components/ui';
+import { PriorityHigh, PriorityMedium, PriorityLow } from '@/components/ui/icons';
 import type { TaskStats } from '@/types';
 
 type Props = {
@@ -8,9 +9,9 @@ type Props = {
 };
 
 const priorityConfig = {
-  high: { label: '높음', color: 'bg-red-500', emoji: '🔴' },
-  medium: { label: '보통', color: 'bg-yellow-500', emoji: '🟡' },
-  low: { label: '낮음', color: 'bg-green-500', emoji: '🟢' },
+  high: { label: '높음', color: 'bg-red-500', component: PriorityHigh },
+  medium: { label: '보통', color: 'bg-yellow-500', component: PriorityMedium },
+  low: { label: '낮음', color: 'bg-green-500', component: PriorityLow },
 };
 
 export function PriorityChart({ stats }: Props) {
@@ -42,7 +43,7 @@ export function PriorityChart({ stats }: Props) {
                 {/* Priority header */}
                 <View className="flex-row items-center justify-between">
                   <View className="flex-row items-center space-x-2">
-                    <Text className="text-base px-1">{config.emoji}</Text>
+                    <config.component size={16} />
                     <Text className="text-md text-gray-900 dark:text-white py-3">
                       {config.label}
                     </Text>

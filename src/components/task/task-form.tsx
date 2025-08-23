@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import type { Control } from 'react-hook-form';
-import { Alert, TextInput } from 'react-native';
+import { Alert, TextInput, Pressable } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 
 import { Button, CategoryManagementModal, ControlledInput, Modal, Text, View, useModal } from '@/components/ui';
+import { Lightbulb, Lightning, Fire, Rocket, Star, Trophy, Chart, Folder, Briefcase, Home, Target, Book, DollarSign, Activity, Palette, ChartLine, Person } from '@/components/ui/icons';
 import { useCategories } from '@/lib/hooks';
 import type { TaskPriority } from '@/types';
 
@@ -30,6 +31,33 @@ export function TaskForm({
   const addCategoryModal = useModal();
   const [newCategoryName, setNewCategoryName] = useState('');
   const [showCategoryManagement, setShowCategoryManagement] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState('folder');
+  const [selectedColor, setSelectedColor] = useState('#3B82F6');
+
+  // 카테고리 아이콘 매핑
+  const getCategoryIcon = (iconKey?: string) => {
+    const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
+      'folder': Folder,
+      'briefcase': Briefcase,
+      'home': Home,
+      'person': Person,
+      'target': Target,
+      'book': Book,
+      'dollar-sign': DollarSign,
+      'activity': Activity,
+      'palette': Palette,
+      'lightning': Lightning,
+      'fire': Fire,
+      'rocket': Rocket,
+      'lightbulb': Lightbulb,
+      'star': Star,
+      'trophy': Trophy,
+      'chart': Chart,
+      'chart-line': ChartLine,
+    };
+    
+    return iconMap[iconKey || 'folder'] || Folder;
+  };
 
   const priorities: { value: TaskPriority; label: string }[] = [
     { value: 'low', label: '낮음' },
@@ -43,28 +71,55 @@ export function TaskForm({
       return;
     }
 
-    // 카테고리 아이콘과 색상 랜덤 선택
-    const businessIcons = ['💼', '📊', '🎯', '⚡', '🔥', '📈', '🚀', '💡', '⭐', '🏆'];
-    const businessColors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4', '#84CC16', '#F97316'];
-    
-    const randomIcon = businessIcons[Math.floor(Math.random() * businessIcons.length)];
-    const randomColor = businessColors[Math.floor(Math.random() * businessColors.length)];
-
     addCategory({
       name: newCategoryName.trim(),
-      icon: randomIcon,
-      color: randomColor,
+      icon: selectedIcon,
+      color: selectedColor,
     });
 
     setNewCategoryName('');
+    setSelectedIcon('folder');
+    setSelectedColor('#3B82F6');
     addCategoryModal.dismiss();
 
     showMessage({
-      message: `카테고리 "${newCategoryName.trim()}"이 추가되었습니다 ✅`,
+      message: `카테고리 "${newCategoryName.trim()}"이 추가되었습니다 ✓`,
       type: 'success',
       duration: 2000,
     });
   };
+
+  // 아이콘 옵션들
+  const iconOptions = [
+    { key: 'folder', component: Folder },
+    { key: 'briefcase', component: Briefcase },
+    { key: 'home', component: Home },
+    { key: 'person', component: Person },
+    { key: 'target', component: Target },
+    { key: 'book', component: Book },
+    { key: 'dollar-sign', component: DollarSign },
+    { key: 'activity', component: Activity },
+    { key: 'palette', component: Palette },
+    { key: 'lightning', component: Lightning },
+    { key: 'fire', component: Fire },
+    { key: 'rocket', component: Rocket },
+    { key: 'lightbulb', component: Lightbulb },
+    { key: 'star', component: Star },
+    { key: 'trophy', component: Trophy },
+    { key: 'chart', component: Chart },
+  ];
+
+  // 색상 옵션들
+  const colorOptions = [
+    '#3B82F6', // blue
+    '#EF4444', // red
+    '#10B981', // green
+    '#F59E0B', // yellow
+    '#8B5CF6', // purple
+    '#EC4899', // pink
+    '#F97316', // orange
+    '#06B6D4', // cyan
+  ];
 
   return (
     <View className="space-y-6">
@@ -126,17 +181,26 @@ export function TaskForm({
             variant={!selectedCategoryId ? 'default' : 'outline'}
             size="sm"
           />
-          {categories.map((category) => (
-            <Button
-              key={category.id}
-              label={`${category.icon} ${category.name}`}
-              onPress={() => setValue('categoryId', category.id)}
-              variant={
-                selectedCategoryId === category.id ? 'default' : 'outline'
-              }
-              size="sm"
-            />
-          ))}
+          {categories.map((category) => {
+            const IconComponent = getCategoryIcon(category.icon);
+            return (
+              <Button
+                key={category.id}
+                onPress={() => setValue('categoryId', category.id)}
+                variant={
+                  selectedCategoryId === category.id ? 'default' : 'outline'
+                }
+                size="sm"
+              >
+                <View className="flex-row items-center">
+                  <IconComponent size={14} color={selectedCategoryId === category.id ? '#ffffff' : (category.color || '#6b7280')} />
+                  <Text className={`ml-2 text-sm ${selectedCategoryId === category.id ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                    {category.name}
+                  </Text>
+                </View>
+              </Button>
+            );
+          })}
           <Button
             label="+ 새 카테고리"
             onPress={addCategoryModal.present}
@@ -159,23 +223,102 @@ export function TaskForm({
       <Modal
         ref={addCategoryModal.ref}
         title="새 카테고리 추가"
-        snapPoints={['40%']}
+        snapPoints={['70%']}
       >
-        <View className="space-y-4 p-4">
-          <TextInput
-            value={newCategoryName}
-            onChangeText={setNewCategoryName}
-            placeholder="카테고리 이름 (예: 중요 프로젝트, 개인 개발)"
-            placeholderTextColor="#9CA3AF"
-            className="rounded-lg border border-gray-300 bg-gray-50 p-3 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-            autoFocus
-          />
+        <View className="flex-1 p-4">
+          <View className="space-y-6">
+            {/* 카테고리 이름 */}
+            <View>
+              <Text className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                카테고리 이름
+              </Text>
+              <TextInput
+                value={newCategoryName}
+                onChangeText={setNewCategoryName}
+                placeholder="카테고리 이름 (예: 중요 프로젝트, 개인 개발)"
+                placeholderTextColor="#9CA3AF"
+                className="rounded-lg border border-gray-300 bg-gray-50 p-3 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                autoFocus
+              />
+            </View>
 
-          <Text className="text-sm text-gray-500 dark:text-gray-400">
-            💡 팁: 업무별, 프로젝트별, 우선순위별로 카테고리를 만들어보세요
-          </Text>
+            {/* 아이콘 선택 */}
+            <View>
+              <Text className="my-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+                아이콘 선택
+              </Text>
+              <View className="flex-row flex-wrap gap-2 ">
+                {iconOptions.map((option) => {
+                  const IconComponent = option.component;
+                  const isSelected = selectedIcon === option.key;
+                  return (
+                    <Pressable
+                      key={option.key}
+                      onPress={() => setSelectedIcon(option.key)}
+                      className={`items-center justify-center rounded-lg p-2 ${
+                        isSelected 
+                          ? 'bg-blue-100 border-2 border-blue-500 dark:bg-blue-900/50 dark:border-blue-400'
+                          : 'bg-gray-100 border border-gray-300 dark:bg-gray-700 dark:border-gray-600'
+                      }`}
+                    >
+                      <IconComponent 
+                        size={18} 
+                        color={isSelected ? selectedColor : '#6b7280'} 
+                      />
+                    </Pressable>
+                  );
+                })}
+              </View>
+            </View>
 
-          <View className="flex-row space-x-3">
+            {/* 색상 선택 */}
+            <View>
+              <Text className="my-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+                색상 선택
+              </Text>
+              <View className="flex-row flex-wrap gap-3">
+                {colorOptions.map((color) => (
+                  <Pressable
+                    key={color}
+                    onPress={() => setSelectedColor(color)}
+                    className={`h-8 w-8 rounded-full ${
+                      selectedColor === color 
+                        ? 'border-4 border-gray-400 dark:border-gray-300'
+                        : 'border border-gray-300 dark:border-gray-600'
+                    }`}
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
+              </View>
+            </View>
+
+            {/* 미리보기 */}
+            <View>
+              <Text className="my-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+                미리보기
+              </Text>
+              <View className="flex-row items-center rounded-lg border border-gray-300 bg-gray-50 p-3 dark:border-gray-600 dark:bg-gray-700">
+                {(() => {
+                  const IconComponent = getCategoryIcon(selectedIcon);
+                  return <IconComponent size={20} color={selectedColor} />;
+                })()}
+                <Text className="ml-3 text-gray-900 dark:text-white">
+                  {newCategoryName || '카테고리 이름'}
+                </Text>
+              </View>
+            </View>
+
+            {/* 팁 */}
+            <View className="flex-row items-start gap-2 my-3">
+              <Lightbulb color="#6b7280" size={16} />
+              <Text className=" text-sm text-gray-500 dark:text-gray-400">
+                팁: 업무별, 프로젝트별, 우선순위별로 카테고리를 만들어보세요
+              </Text>
+            </View>
+          </View>
+
+          {/* 하단 버튼들 */}
+          <View className="mt-6 flex-row space-x-3">
             <Button
               label="추가하기"
               onPress={handleAddCategory}
@@ -188,6 +331,8 @@ export function TaskForm({
               onPress={() => {
                 addCategoryModal.dismiss();
                 setNewCategoryName('');
+                setSelectedIcon('folder');
+                setSelectedColor('#3B82F6');
               }}
               className="flex-1"
               size="sm"

@@ -66,7 +66,7 @@ export default function EditTask() {
     });
 
     showMessage({
-      message: '할일이 수정되었습니다! ✅',
+      message: '할일이 수정되었습니다! ✓',
       type: 'success',
     });
 

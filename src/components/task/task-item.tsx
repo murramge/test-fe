@@ -13,6 +13,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Text, View } from '@/components/ui';
+import { Edit, Trash, Check, Folder, Briefcase, Home, Target, Book, DollarSign, Activity, Palette, Lightning, Fire, Rocket, Lightbulb, Star, Trophy, Chart, ChartLine, Person } from '@/components/ui/icons';
 import { useTaskStore } from '@/lib/hooks';
 import type { TaskWithCategory } from '@/types';
 
@@ -31,6 +32,31 @@ export function TaskItem({
   onToggleStatus,
 }: Props) {
   const router = useRouter();
+
+  // 카테고리 아이콘 컴포넌트 가져오기
+  const getCategoryIcon = (iconKey?: string) => {
+    const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
+      'folder': Folder,
+      'briefcase': Briefcase,
+      'home': Home,
+      'person': Person,
+      'target': Target,
+      'book': Book,
+      'dollar-sign': DollarSign,
+      'activity': Activity,
+      'palette': Palette,
+      'lightning': Lightning,
+      'fire': Fire,
+      'rocket': Rocket,
+      'lightbulb': Lightbulb,
+      'star': Star,
+      'trophy': Trophy,
+      'chart': Chart,
+      'chart-line': ChartLine,
+    };
+    
+    return iconMap[iconKey || 'folder'] || Folder;
+  };
   const { deleteTask } = useTaskStore();
   const isCompleted = task.status === 'completed';
   const translateX = useSharedValue(0);
@@ -164,7 +190,7 @@ export function TaskItem({
           onPress={handleEdit}
           className="w-16 items-center justify-center bg-blue-500"
         >
-          <Text className="text-lg">✏️</Text>
+          <Edit color="white" size={16} />
           <Text className="text-xs font-medium text-white">편집</Text>
         </Pressable>
         
@@ -173,7 +199,7 @@ export function TaskItem({
           onPress={handleDelete}
           className="w-16 items-center justify-center bg-red-500"
         >
-          <Text className="text-lg">🗑️</Text>
+          <Trash color="white" size={16} />
           <Text className="text-xs font-medium text-white">삭제</Text>
         </Pressable>
       </Animated.View>
@@ -198,7 +224,9 @@ export function TaskItem({
                         }`}
                       >
                         {isCompleted && (
-                          <Text className="text-center text-xs text-white">✓</Text>
+                          <View className="items-center justify-center flex-1">
+                            <Check color="white" size={12} />
+                          </View>
                         )}
                       </Pressable>
 
@@ -237,9 +265,13 @@ export function TaskItem({
 
                       {/* Category */}
                       {task.category && (
-                        <View className="mr-3 rounded-full bg-gray-100 px-2 py-1 dark:bg-gray-700">
-                          <Text className="text-xs text-gray-600 dark:text-gray-300">
-                            {task.category.icon} {task.category.name}
+                        <View className="mr-3 rounded-full bg-gray-100 px-2 py-1 dark:bg-gray-700 flex-row items-center">
+                          {(() => {
+                            const IconComponent = getCategoryIcon(task.category.icon);
+                            return <IconComponent size={10} color={task.category.color || '#6b7280'} />;
+                          })()}
+                          <Text className="ml-1 text-xs text-gray-600 dark:text-gray-300">
+                            {task.category.name}
                           </Text>
                         </View>
                       )}

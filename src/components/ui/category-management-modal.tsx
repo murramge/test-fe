@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Alert, Pressable } from 'react-native';
+import { Alert, Pressable, ScrollView } from 'react-native';
 
 import { useCategories } from '@/lib/hooks';
 import type { Category } from '@/types';
 
 import { Button, Input, Modal, Text, View, useModal } from './';
+import { Folder, Briefcase, Home, Target, Book, DollarSign, Activity, Palette, Lightning, Fire, Rocket, Lightbulb, Star, Trophy, Chart, Person } from './icons';
 
 type Props = {
   isVisible: boolean;
@@ -42,10 +43,10 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
       id: category.id,
       name: category.name,
       color: category.color,
-      icon: category.icon || '📁',
+      icon: category.icon || 'folder',
     });
     setEditName(category.name);
-    setEditIcon(category.icon || '📁');
+    setEditIcon(category.icon || 'folder');
     setEditColor(category.color);
   };
 
@@ -100,7 +101,24 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
     '#06B6D4', // cyan
   ];
 
-  const iconOptions = ['📁', '💼', '🏠', '🎯', '📚', '💰', '🏃‍♂️', '🎨'];
+  const iconOptions = [
+    { emoji: '📁', key: 'folder', component: Folder },
+    { emoji: '💼', key: 'briefcase', component: Briefcase },
+    { emoji: '🏠', key: 'home', component: Home },
+    { emoji: '👤', key: 'person', component: Person },
+    { emoji: '🎯', key: 'target', component: Target },
+    { emoji: '📚', key: 'book', component: Book },
+    { emoji: '💰', key: 'dollar-sign', component: DollarSign },
+    { emoji: '🏃‍♂️', key: 'activity', component: Activity },
+    { emoji: '🎨', key: 'palette', component: Palette },
+    { emoji: '⚡', key: 'lightning', component: Lightning },
+    { emoji: '🔥', key: 'fire', component: Fire },
+    { emoji: '🚀', key: 'rocket', component: Rocket },
+    { emoji: '💡', key: 'lightbulb', component: Lightbulb },
+    { emoji: '⭐', key: 'star', component: Star },
+    { emoji: '🏆', key: 'trophy', component: Trophy },
+    { emoji: '📊', key: 'chart', component: Chart },
+  ];
 
   const handleClose = () => {
     modal.dismiss();
@@ -111,7 +129,7 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
     <Modal 
       ref={modal.ref} 
       title="카테고리 관리"
-      snapPoints={['55%']}
+      snapPoints={['70%']}
     >
       <View className="flex-1 p-6">
         {categories.length === 0 ? (
@@ -121,8 +139,9 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
             </Text>
           </View>
         ) : (
-          <View className="max-h-96 space-y-3">
-            {categories.map((category) => (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View className="space-y-3 pb-6">
+              {categories.map((category) => (
               <View
                 key={category.id}
                 className="rounded-lg border border-gray-200 p-3 dark:border-gray-600"
@@ -138,21 +157,24 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
                     
                     {/* 아이콘 선택 */}
                     <View>
-                      <Text className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <Text className="my-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                         아이콘
                       </Text>
                       <View className="flex-row flex-wrap gap-2">
-                        {iconOptions.map((icon) => (
+                        {iconOptions.map((option) => (
                           <Pressable
-                            key={icon}
-                            onPress={() => setEditIcon(icon)}
+                            key={option.emoji}
+                            onPress={() => setEditIcon(option.emoji)}
                             className={`rounded-lg p-2 ${
-                              editIcon === icon
+                              editIcon === option.emoji
                                 ? 'bg-blue-100 dark:bg-blue-900/30'
                                 : 'bg-gray-100 dark:bg-gray-700'
                             }`}
                           >
-                            <Text className="text-lg">{icon}</Text>
+                            <option.component 
+                              color={editIcon === option.emoji ? '#3b82f6' : '#6b7280'} 
+                              size={20} 
+                            />
                           </Pressable>
                         ))}
                       </View>
@@ -160,7 +182,7 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
 
                     {/* 색상 선택 */}
                     <View>
-                      <Text className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <Text className="my-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                         색상
                       </Text>
                       <View className="flex-row flex-wrap gap-2">
@@ -201,7 +223,24 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
                         className="mr-3 h-4 w-4 rounded-full"
                         style={{ backgroundColor: category.color }}
                       />
-                      <Text className="text-lg">{category.icon || '📁'}</Text>
+                      <View className="mr-2">
+                        {(() => {
+                          // 먼저 키 기반으로 찾기
+                          const iconOptionByKey = iconOptions.find(opt => opt.key === category.icon);
+                          if (iconOptionByKey) {
+                            const IconComponent = iconOptionByKey.component;
+                            return <IconComponent color={category.color} size={20} />;
+                          }
+                          // 이모지 기반으로 찾기 (하위 호환성)
+                          const iconOptionByEmoji = iconOptions.find(opt => opt.emoji === category.icon);
+                          if (iconOptionByEmoji) {
+                            const IconComponent = iconOptionByEmoji.component;
+                            return <IconComponent color={category.color} size={20} />;
+                          }
+                          // 기본 폴더 아이콘
+                          return <Folder color="#6b7280" size={20} />;
+                        })()}
+                      </View>
                       <Text className="ml-2 flex-1 text-gray-900 dark:text-white">
                         {category.name}
                       </Text>
@@ -225,8 +264,9 @@ export function CategoryManagementModal({ isVisible, onClose }: Props) {
                   </View>
                 )}
               </View>
-            ))}
-          </View>
+              ))}
+            </View>
+          </ScrollView>
         )}
 
       </View>

@@ -20,6 +20,7 @@ import {
   useTaskStats,
   useTaskStore,
 } from '@/lib/hooks';
+import { Calendar, Check, Clipboard, FileText, AlertCircle, Lightbulb, Lightning, Fire, Rocket, Star, Trophy, Chart, Plus as PlusIcon, Wave, Party, ThumbsUp, Sparkles, PriorityHigh, PriorityMedium, PriorityLow, Urgent, Folder, Briefcase, Home as HomeIcon, Target, Book, DollarSign, Activity, Palette, ChartLine, Person } from '@/components/ui/icons';
 import { userStorage } from '@/lib/storage/user-storage';
 
 export default function Home() {
@@ -29,6 +30,31 @@ export default function Home() {
   const { categories } = useCategories();
   const stats = useTaskStats();
   const { createSampleData } = useSampleData();
+
+  // 카테고리 아이콘 매핑
+  const getCategoryIcon = (iconKey?: string) => {
+    const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
+      'folder': Folder,
+      'briefcase': Briefcase,
+      'home': HomeIcon,
+      'person': Person,
+      'target': Target,
+      'book': Book,
+      'dollar-sign': DollarSign,
+      'activity': Activity,
+      'palette': Palette,
+      'lightning': Lightning,
+      'fire': Fire,
+      'rocket': Rocket,
+      'lightbulb': Lightbulb,
+      'star': Star,
+      'trophy': Trophy,
+      'chart': Chart,
+      'chart-line': ChartLine,
+    };
+    
+    return iconMap[iconKey || 'folder'] || Folder;
+  };
   
   // 빠른 할일 추가 상태
   const [quickTitle, setQuickTitle] = useState('');
@@ -126,7 +152,7 @@ export default function Home() {
     setIsQuickAddExpanded(false);
 
     showMessage({
-      message: '할일이 추가되었습니다 ✅',
+      message: '할일이 추가되었습니다 ✓',
       type: 'success',
       duration: 2000,
     });
@@ -145,7 +171,7 @@ export default function Home() {
     }
 
     // 카테고리 아이콘과 색상 랜덤 선택 (직장인 친화적)
-    const businessIcons = ['💼', '📊', '🎯', '⚡', '🔥', '📈', '🚀', '💡', '⭐', '🏆'];
+    const businessIcons = ['briefcase', 'chart', 'target', 'lightning', 'fire', 'chart-line', 'rocket', 'lightbulb', 'star', 'trophy'];
     const businessColors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4', '#84CC16', '#F97316'];
     
     const randomIcon = businessIcons[Math.floor(Math.random() * businessIcons.length)];
@@ -161,7 +187,7 @@ export default function Home() {
     setShowCategoryAdd(false);
 
     showMessage({
-      message: `카테고리 "${newCategoryName.trim()}"이 추가되었습니다 ✅`,
+      message: `카테고리 "${newCategoryName.trim()}"이 추가되었습니다 ✓`,
       type: 'success',
       duration: 2000,
     });
@@ -177,28 +203,28 @@ export default function Home() {
     if (completionRate >= 80) {
       return {
         level: 'excellent',
-        message: `🏆 훌륭해요! 완료율 ${Math.round(completionRate)}%`,
+        message: `훌륭해요! 완료율 ${Math.round(completionRate)}%`,
         color: 'text-green-600 dark:text-green-400',
         bgColor: 'bg-green-50 dark:bg-green-900/20',
       };
     } else if (completionRate >= 60) {
       return {
         level: 'good',
-        message: `🎯 잘하고 있어요! 완료율 ${Math.round(completionRate)}%`,
+        message: `잘하고 있어요! 완료율 ${Math.round(completionRate)}%`,
         color: 'text-blue-600 dark:text-blue-400',
         bgColor: 'bg-blue-50 dark:bg-blue-900/20',
       };
     } else if (completionRate >= 40) {
       return {
         level: 'average',
-        message: `⚡ 조금만 더 힘내요! 완료율 ${Math.round(completionRate)}%`,
+        message: `조금만 더 힘내요! 완료율 ${Math.round(completionRate)}%`,
         color: 'text-yellow-600 dark:text-yellow-400',
         bgColor: 'bg-yellow-50 dark:bg-yellow-900/20',
       };
     } else {
       return {
         level: 'needsWork',
-        message: `🚀 새로운 시작! 오늘 목표를 세워보세요`,
+        message: `새로운 시작! 오늘 목표를 세워보세요`,
         color: 'text-orange-600 dark:text-orange-400',
         bgColor: 'bg-orange-50 dark:bg-orange-900/20',
       };
@@ -215,9 +241,12 @@ export default function Home() {
         <View className="p-4">
           {/* 개인화된 헤더 & 생산성 인사이트 */}
           <View className="mb-6">
-            <Text className="text-2xl font-bold text-gray-900 dark:text-white">
-              {getGreeting()}, {currentUser?.name || '사용자'}님! 👋
-            </Text>
+            <View className="flex-row items-center">
+              <Text className="text-2xl font-bold text-gray-900 dark:text-white">
+                {getGreeting()}, {currentUser?.name || '사용자'}님!
+              </Text>
+              <Wave color="#6b7280" size={24} style={{ marginLeft: 8 }} />
+            </View>
             <Text className="text-gray-600 dark:text-gray-400">
               오늘 완료: {stats.completed}개 | 진행 중: {stats.pending}개 | 전체: {stats.total}개
             </Text>
@@ -249,7 +278,7 @@ export default function Home() {
               >
                 <View className="flex-row items-center">
                   <View className="mr-3 size-10 items-center justify-center rounded-full bg-blue-600">
-                    <Text className="text-lg text-white">+</Text>
+                    <PlusIcon color="white" size={20} />
                   </View>
                   <View className="flex-1">
                     <Text className="font-medium text-blue-900 dark:text-blue-100">
@@ -265,7 +294,7 @@ export default function Home() {
               <View className="rounded-xl bg-white p-4 shadow-sm dark:bg-neutral-800">
                 <View className="mb-4 flex-row items-center">
                   <View className="mr-3 size-10 items-center justify-center rounded-full bg-blue-600">
-                    <Text className="text-lg text-white">+</Text>
+                    <PlusIcon color="white" size={20} />
                   </View>
                   <Text className="text-lg font-semibold text-gray-900 dark:text-white">
                     빠른 할일 추가
@@ -315,7 +344,7 @@ export default function Home() {
             <View className="mb-6 rounded-xl bg-red-50 p-4 dark:bg-red-900/20">
               <View className="mb-3 flex-row items-center">
                 <View className="mr-2 size-6 items-center justify-center rounded-full bg-red-600">
-                  <Text className="text-xs font-bold text-white">!</Text>
+                  <AlertCircle color="white" size={12} />
                 </View>
                 <Text className="text-lg font-bold text-red-900 dark:text-red-100">
                   긴급 할일
@@ -343,9 +372,12 @@ export default function Home() {
                           {task.title}
                         </Text>
                         {task.dueDate && (
-                          <Text className="mt-1 text-sm font-medium text-red-600 dark:text-red-400">
-                            🚨 {getDaysLeft(task.dueDate)}
-                          </Text>
+                          <View className="mt-1 flex-row items-center">
+                            <Urgent color="#dc2626" size={14} />
+                            <Text className="ml-1 text-sm font-medium text-red-600 dark:text-red-400">
+                              {getDaysLeft(task.dueDate)}
+                            </Text>
+                          </View>
                         )}
                       </View>
                       <View className="ml-3">
@@ -402,7 +434,10 @@ export default function Home() {
                         className="mr-3 size-8 items-center justify-center rounded-lg"
                         style={{ backgroundColor: `${category.color}20` }}
                       >
-                        <Text className="text-lg">{category.icon}</Text>
+                        {(() => {
+                          const IconComponent = getCategoryIcon(category.icon);
+                          return <IconComponent color={category.color} size={18} />;
+                        })()}
                       </View>
                       <View>
                         <Text className="font-semibold text-gray-900 dark:text-white">
@@ -437,7 +472,7 @@ export default function Home() {
                             className="mr-3 size-5 items-center justify-center rounded border-2 border-gray-300 dark:border-gray-600"
                           >
                             {task.status === 'completed' && (
-                              <Text className="text-green-600 dark:text-green-400">✓</Text>
+                              <Check color="#16a34a" size={12} />
                             )}
                           </Pressable>
                           
@@ -453,9 +488,12 @@ export default function Home() {
                             </Text>
                             
                             {task.dueDate && (
-                              <Text className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                📅 {new Date(task.dueDate).toLocaleDateString()}
-                              </Text>
+                              <View className="mt-1 flex-row items-center">
+                                <Calendar size={12} color="#6b7280" />
+                                <Text className="ml-1 text-xs text-gray-500 dark:text-gray-400">
+                                  {new Date(task.dueDate).toLocaleDateString()}
+                                </Text>
+                              </View>
                             )}
                           </View>
 
@@ -469,17 +507,15 @@ export default function Home() {
                                   : 'bg-green-100 dark:bg-green-900/50'
                               }`}
                             >
-                              <Text
-                                className={`text-xs ${
-                                  task.priority === 'high'
-                                    ? 'text-red-700 dark:text-red-300'
-                                    : task.priority === 'medium'
-                                    ? 'text-yellow-700 dark:text-yellow-300'
-                                    : 'text-green-700 dark:text-green-300'
-                                }`}
-                              >
-                                {task.priority === 'high' ? '🔴' : task.priority === 'medium' ? '🟡' : '🟢'}
-                              </Text>
+                              <View className="flex-row items-center">
+                                {task.priority === 'high' ? (
+                                  <PriorityHigh size={12} />
+                                ) : task.priority === 'medium' ? (
+                                  <PriorityMedium size={12} />
+                                ) : (
+                                  <PriorityLow size={12} />
+                                )}
+                              </View>
                             </View>
                           </View>
                         </View>
@@ -505,7 +541,7 @@ export default function Home() {
                   <View className="mb-3 flex-row items-center justify-between">
                     <View className="flex-row items-center">
                       <View className="mr-3 size-8 items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-700">
-                        <Text className="text-lg">📝</Text>
+                        <FileText color="#6b7280" size={24} />
                       </View>
                       <View>
                         <Text className="font-semibold text-gray-900 dark:text-white">
@@ -530,7 +566,7 @@ export default function Home() {
                             className="mr-3 size-5 items-center justify-center rounded border-2 border-gray-300 dark:border-gray-600"
                           >
                             {task.status === 'completed' && (
-                              <Text className="text-green-600 dark:text-green-400">✓</Text>
+                              <Check color="#16a34a" size={12} />
                             )}
                           </Pressable>
                           
@@ -546,9 +582,12 @@ export default function Home() {
                             </Text>
                             
                             {task.dueDate && (
-                              <Text className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                📅 {new Date(task.dueDate).toLocaleDateString()}
-                              </Text>
+                              <View className="mt-1 flex-row items-center">
+                                <Calendar size={12} color="#6b7280" />
+                                <Text className="ml-1 text-xs text-gray-500 dark:text-gray-400">
+                                  {new Date(task.dueDate).toLocaleDateString()}
+                                </Text>
+                              </View>
                             )}
                           </View>
                         </View>
@@ -564,7 +603,7 @@ export default function Home() {
           {tasks.length === 0 && (
             <View className="items-center justify-center rounded-xl bg-white p-8 shadow-sm dark:bg-neutral-800">
               <View className="mb-4 size-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
-                <Text className="text-2xl">📋</Text>
+                <Clipboard color="#3b82f6" size={40} />
               </View>
               <Text className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                 TaskFlow에 오신 것을 환영합니다!
@@ -576,9 +615,12 @@ export default function Home() {
               {/* 개발용 샘플 데이터 버튼 */}
               <Pressable onPress={handleAddSampleData}>
                 <View className="rounded-lg bg-blue-50 px-6 py-3 dark:bg-blue-900/20">
-                  <Text className="text-center font-medium text-blue-600 dark:text-blue-400">
-                    📝 샘플 할일 추가하기
-                  </Text>
+                  <View className="flex-row items-center justify-center">
+                    <FileText color="#2563eb" size={18} />
+                    <Text className="ml-2 text-center font-medium text-blue-600 dark:text-blue-400">
+                      샘플 할일 추가하기
+                    </Text>
+                  </View>
                   <Text className="mt-1 text-center text-xs text-blue-500 dark:text-blue-300">
                     앱 체험을 위한 예시 데이터
                   </Text>

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { Text, View } from 'react-native';
+
+import { Calendar } from '@/components/ui/icons';
 import type { Task } from '@/types';
 
 type Props = {
@@ -62,14 +64,21 @@ export function ActivityHeatmap({ tasks, dateRange }: Props) {
       shadowRadius: 8,
       elevation: 3,
     }}>
-      <Text style={{
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#111827',
+      <View style={{
+        flexDirection: 'row',
+        alignItems: 'center',
         marginBottom: 8,
       }}>
-        📅 활동 히트맵
-      </Text>
+        <Calendar color="#6366f1" size={16} />
+        <Text style={{
+          fontSize: 16,
+          fontWeight: '600',
+          color: '#111827',
+          marginLeft: 6,
+        }}>
+          활동 히트맵
+        </Text>
+      </View>
       
       <Text style={{
         fontSize: 12,

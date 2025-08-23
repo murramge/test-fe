@@ -47,7 +47,7 @@ export default function Register() {
     
     // 회원가입 성공 알림 후 로그인 화면으로 이동
     Alert.alert(
-      '회원가입 완료! 🎉',
+      '회원가입 완료!',
       `환영합니다, ${newUser.name}님!\n이제 로그인을 통해 TaskFlow를 시작하세요.`,
       [
         {

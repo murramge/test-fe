@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
+import { TrendUp, TrendDown, Check, Clock, Chart, Lightbulb } from '@/components/ui/icons';
 import type { TaskStats } from '@/types';
 
 type Props = {
@@ -22,12 +23,19 @@ export function ProductivityMetrics({ stats, previousStats }: Props) {
     
     const isPositive = trend > 0;
     const color = isPositive ? 'text-green-500' : 'text-red-500';
-    const arrow = isPositive ? '↗️' : '↘️';
+    const ArrowComponent = isPositive ? TrendUp : TrendDown;
     
     return (
-      <Text className={`text-xs ${color}`}>
-        {arrow} {Math.abs(trend).toFixed(1)}%
-      </Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <ArrowComponent color={isPositive ? '#10b981' : '#ef4444'} size={12} />
+        <Text style={{ 
+          marginLeft: 4, 
+          fontSize: 12, 
+          color: isPositive ? '#10b981' : '#ef4444' 
+        }}>
+          {Math.abs(trend).toFixed(1)}%
+        </Text>
+      </View>
     );
   };
 
@@ -107,7 +115,7 @@ export function ProductivityMetrics({ stats, previousStats }: Props) {
               borderRadius: 16,
               backgroundColor: '#DCFCE7',
             }}>
-              <Text style={{ fontSize: 16 }}>✅</Text>
+              <Check color="#16a34a" size={16} />
             </View>
             <Text style={{
               fontSize: 18,
@@ -150,7 +158,7 @@ export function ProductivityMetrics({ stats, previousStats }: Props) {
               borderRadius: 16,
               backgroundColor: '#FED7AA',
             }}>
-              <Text style={{ fontSize: 16 }}>⏳</Text>
+              <Clock color="#ea580c" size={16} />
             </View>
             <Text style={{
               fontSize: 18,
@@ -191,7 +199,7 @@ export function ProductivityMetrics({ stats, previousStats }: Props) {
               borderRadius: 16,
               backgroundColor: '#DBEAFE',
             }}>
-              <Text style={{ fontSize: 16 }}>📊</Text>
+              <Chart color="#2563eb" size={16} />
             </View>
             <Text style={{
               fontSize: 18,
@@ -223,14 +231,21 @@ export function ProductivityMetrics({ stats, previousStats }: Props) {
         shadowRadius: 8,
         elevation: 3,
       }}>
-        <Text style={{
-          fontSize: 16,
-          fontWeight: '600',
-          color: '#111827',
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
           marginBottom: 8,
         }}>
-          💡 생산성 인사이트
-        </Text>
+          <Lightbulb color="#eab308" size={16} />
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '600',
+            color: '#111827',
+            marginLeft: 6,
+          }}>
+            생산성 인사이트
+          </Text>
+        </View>
         
         <View style={{ gap: 6 }}>
           {stats.byCategory.length > 0 && (

@@ -17,6 +17,7 @@ import {
   useTaskStats,
   useTaskStore,
 } from '@/lib/hooks';
+import { Filter, FileText, Plus, Repeat, Folder, Briefcase, Home, Target, Book, DollarSign, Activity, Palette, Lightning, Fire, Rocket, Lightbulb, Star, Trophy, Chart, ChartLine, Person } from '@/components/ui/icons';
 import type { TaskFilters } from '@/types';
 
 function TasksContent() {
@@ -26,6 +27,31 @@ function TasksContent() {
   const { categoryId } = useLocalSearchParams();
   const [filters, setFilters] = useState<TaskFilters>({});
   const [showFilters, setShowFilters] = useState(true);
+
+  // 카테고리 아이콘 매핑
+  const getCategoryIcon = (iconKey?: string) => {
+    const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
+      'folder': Folder,
+      'briefcase': Briefcase,
+      'home': Home,
+      'person': Person,
+      'target': Target,
+      'book': Book,
+      'dollar-sign': DollarSign,
+      'activity': Activity,
+      'palette': Palette,
+      'lightning': Lightning,
+      'fire': Fire,
+      'rocket': Rocket,
+      'lightbulb': Lightbulb,
+      'star': Star,
+      'trophy': Trophy,
+      'chart': Chart,
+      'chart-line': ChartLine,
+    };
+    
+    return iconMap[iconKey || 'folder'] || Folder;
+  };
 
   const { tasks, isLoading } = useTasks(filters);
 
@@ -66,9 +92,19 @@ function TasksContent() {
             <View>
               {filters.categoryId ? (
                 <View>
-                  <Text className="text-xl font-bold text-gray-900 dark:text-white">
-                    {categories.find(cat => cat.id === filters.categoryId)?.icon} {categories.find(cat => cat.id === filters.categoryId)?.name || '할일 관리'}
-                  </Text>
+                  <View className="flex-row items-center">
+                    {(() => {
+                      const selectedCategory = categories.find(cat => cat.id === filters.categoryId);
+                      if (selectedCategory) {
+                        const IconComponent = getCategoryIcon(selectedCategory.icon);
+                        return <IconComponent color={selectedCategory.color} size={20} />;
+                      }
+                      return null;
+                    })()}
+                    <Text className="ml-2 text-xl font-bold text-gray-900 dark:text-white">
+                      {categories.find(cat => cat.id === filters.categoryId)?.name || '할일 관리'}
+                    </Text>
+                  </View>
                   <Text className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                     이 카테고리의 할일 • 총 {tasks.length}개
                   </Text>
@@ -91,9 +127,12 @@ function TasksContent() {
                   onPress={() => setFilters({})}
                   className="rounded-full bg-green-100 px-2 py-1 dark:bg-green-900/30"
                 >
-                  <Text className="text-xs font-medium text-green-700 dark:text-green-300">
-                    🔄 전체보기
-                  </Text>
+                  <View className="flex-row items-center">
+                    <Repeat color="#15803d" size={12} />
+                    <Text className="ml-1 text-xs font-medium text-green-700 dark:text-green-300">
+                      전체보기
+                    </Text>
+                  </View>
                 </Pressable>
               )}
               <Pressable
@@ -104,13 +143,16 @@ function TasksContent() {
                     : 'bg-gray-100 dark:bg-gray-700'
                 }`}
               >
-                <Text className={`text-xs font-medium ${
-                  showFilters 
-                    ? 'text-blue-700 dark:text-blue-300' 
-                    : 'text-gray-700 dark:text-gray-300'
-                }`}>
-                  🔍 필터
-                </Text>
+                <View className="flex-row items-center">
+                  <Filter size={14} color={showFilters ? '#1d4ed8' : '#374151'} />
+                  <Text className={`ml-1 text-xs font-medium ${
+                    showFilters 
+                      ? 'text-blue-700 dark:text-blue-300' 
+                      : 'text-gray-700 dark:text-gray-300'
+                  }`}>
+                    필터
+                  </Text>
+                </View>
               </Pressable>
             </View>
           </View>
@@ -171,7 +213,9 @@ function TasksContent() {
         ) : (
           <View className="flex-1 items-center justify-center p-8">
             <View className="items-center">
-              <Text className="text-6xl mb-4">📝</Text>
+              <View className="mb-4 size-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
+                <FileText color="#3b82f6" size={48} />
+              </View>
               <Text className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 할일이 없습니다
               </Text>
@@ -181,8 +225,8 @@ function TasksContent() {
               
               <Link href="/add-task" asChild>
                 <Pressable className="flex-row items-center rounded-xl bg-blue-500 px-6 py-3">
-                  <Text className="mr-2 text-lg">➕</Text>
-                  <Text className="font-medium text-white">첫 할일 추가하기</Text>
+                  <Plus color="white" size={20} />
+                  <Text className="ml-2 font-medium text-white">첫 할일 추가하기</Text>
                 </Pressable>
               </Link>
             </View>
@@ -202,7 +246,7 @@ function TasksContent() {
             elevation: 8,
           }}
         >
-          <Text className="text-2xl text-white">+</Text>
+          <Plus color="white" size={24} />
         </Pressable>
       </Link>
     </SafeAreaView>

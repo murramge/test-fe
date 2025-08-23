@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Text, View } from '@/components/ui';
+import { Folder, Briefcase, Home, Target, Book, DollarSign, Activity, Palette, Lightning, Fire, Rocket, Lightbulb, Star, Trophy, Chart, Person } from '@/components/ui/icons';
 import type { TaskStats } from '@/types';
 
 type Props = {
@@ -9,6 +10,30 @@ type Props = {
 
 export function CategoryChart({ stats }: Props) {
   const maxTotal = Math.max(...stats.byCategory.map((cat) => cat.total), 1);
+
+  // 카테고리 아이콘 매핑
+  const getIconComponent = (iconKey?: string) => {
+    const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
+      'folder': Folder,
+      'briefcase': Briefcase,
+      'home': Home,
+      'person': Person,
+      'target': Target,
+      'book': Book,
+      'dollar-sign': DollarSign,
+      'activity': Activity,
+      'palette': Palette,
+      'lightning': Lightning,
+      'fire': Fire,
+      'rocket': Rocket,
+      'lightbulb': Lightbulb,
+      'star': Star,
+      'trophy': Trophy,
+      'chart': Chart,
+    };
+    
+    return iconMap[iconKey || 'folder'] || Folder;
+  };
 
   return (
     <View className="space-y-3">
