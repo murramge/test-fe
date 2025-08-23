@@ -7,13 +7,13 @@ const titleSchema = z.string().min(1, '제목을 입력해주세요');
 
 const descriptionSchema = z.string().optional();
 
-const categoryIdSchema = z.string().min(1, '카테고리를 선택해주세요');
+const categoryIdSchema = z.string().optional();
 
 const prioritySchema = z.enum(['low', 'medium', 'high'] as const, {
   required_error: '우선순위를 선택해주세요',
 });
 
-const statusSchema = z.enum(['todo', 'in-progress', 'completed', 'cancelled'] as const, {
+const statusSchema = z.enum(['pending', 'in-progress', 'completed', 'cancelled'] as const, {
   required_error: '상태를 선택해주세요',
 });
 
@@ -25,7 +25,7 @@ export const taskFormSchema = z.object({
   description: descriptionSchema,
   categoryId: categoryIdSchema,
   priority: prioritySchema,
-  status: statusSchema.default('todo'),
+  status: statusSchema.default('pending'),
   dueDate: dueDateSchema,
 });
 

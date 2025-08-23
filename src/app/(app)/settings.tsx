@@ -2,6 +2,7 @@
 import { Env } from '@env';
 import { useColorScheme } from 'nativewind';
 
+import { CategoryItem } from '@/components/settings/category-item';
 import { Item } from '@/components/settings/item';
 import { ItemsContainer } from '@/components/settings/items-container';
 import { LanguageItem } from '@/components/settings/language-item';
@@ -33,6 +34,7 @@ export default function Settings() {
           <ItemsContainer title="settings.generale">
             <LanguageItem />
             <ThemeItem />
+            <CategoryItem />
           </ItemsContainer>
 
           <ItemsContainer title="settings.about">

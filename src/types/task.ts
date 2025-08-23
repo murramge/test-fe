@@ -1,4 +1,4 @@
-export type TaskStatus = 'pending' | 'completed' | 'cancelled';
+export type TaskStatus = 'pending' | 'in-progress' | 'completed' | 'cancelled';
 
 export type TaskPriority = 'low' | 'medium' | 'high';
 

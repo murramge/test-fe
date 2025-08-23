@@ -2,6 +2,7 @@ import { cssInterop } from 'nativewind';
 import Svg from 'react-native-svg';
 
 export * from './button';
+export * from './category-management-modal';
 export * from './checkbox';
 export { default as colors } from './colors';
 export * from './floating-action-button';

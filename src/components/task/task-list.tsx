@@ -50,16 +50,15 @@ export function TaskList({
   }, [isLoading]);
 
   return (
-    <View className="flex-1">
-      <FlashList
-        data={tasks}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        ListEmptyComponent={EmptyComponent}
-        estimatedItemSize={120}
-        contentContainerStyle={{ padding: 16 }}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+    <FlashList
+      data={tasks}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id}
+      ListEmptyComponent={EmptyComponent}
+      estimatedItemSize={140}
+      contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
+      showsVerticalScrollIndicator={false}
+      className="flex-1"
+    />
   );
 }

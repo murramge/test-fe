@@ -3,7 +3,6 @@ import { useCallback, useEffect } from 'react';
 
 import {
   Home as HomeIcon,
-  Plus,
   Settings as SettingsIcon,
   Stats as StatsIcon,
   Tasks as TasksIcon,
@@ -16,6 +15,7 @@ export default function TabLayout() {
   const hideSplash = useCallback(async () => {
     await SplashScreen.hideAsync();
   }, []);
+  
   useEffect(() => {
     if (status !== 'idle') {
       setTimeout(() => {
@@ -23,6 +23,11 @@ export default function TabLayout() {
       }, 1000);
     }
   }, [hideSplash, status]);
+
+  // 로딩 중이거나 상태가 확정되지 않았을 때는 아무것도 렌더링하지 않음
+  if (status === 'idle') {
+    return null;
+  }
 
   if (isFirstTime) {
     return <Redirect href="/onboarding" />;
@@ -65,14 +70,7 @@ export default function TabLayout() {
         }}
       />
 
-      <Tabs.Screen
-        name="add-task"
-        options={{
-          title: '추가',
-          tabBarIcon: ({ color }) => <Plus color={color} />,
-          tabBarButtonTestID: 'add-tab',
-        }}
-      />
+
 
       <Tabs.Screen
         name="settings"
