@@ -8,10 +8,12 @@ import { ProductivityMetrics } from '@/components/charts/productivity-metrics';
 import { ProductivityPattern } from '@/components/charts/productivity-pattern';
 import { ProgressRing } from '@/components/charts/progress-ring';
 import { FocusAwareStatusBar, ScrollView, Text, View, SafeAreaView } from '@/components/ui';
-import { ChartBar, ChartLine, Sparkles, Fire, Party, ThumbsUp } from '@/components/ui/icons';
+import { ChartBar, ChartLine } from '@/components/ui/icons';
+import { useColorScheme } from 'nativewind';
 import { Platform, StatusBar, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFilteredStats, useTaskStore } from '@/lib/hooks';
+import { colorScheme } from 'nativewind';
 
 export default function Stats() {
   const { loadData } = useTaskStore();
@@ -19,6 +21,7 @@ export default function Stats() {
   const { stats, previousStats, filteredTasks } = useFilteredStats(selectedRange);
   const insets = useSafeAreaInsets();
   const { width: screenWidth } = Dimensions.get('window');
+  const { colorScheme } = useColorScheme();
 
   useEffect(() => {
     loadData();
@@ -66,12 +69,12 @@ export default function Stats() {
                 minHeight: Platform.OS === 'ios' ? 80 : 100 
               }}>
           <View className="flex-row   mb-2">
-            <ChartBar color="white" size={28} />
-            <Text className="text-2xl font-bold text-white ml-3">
+          <ChartLine color={colorScheme === 'dark' ? '#ffffff' : '#111827'} size={18} />
+          <Text className="text-2xl font-bold text-gray-900 dark:text-white ml-3">
               생산성 대시보드
             </Text>
           </View>
-          <Text className=" text-blue-100 text-base">
+          <Text className=" text-gray-900 dark:text-blue-100 text-base">
             {getMotivationalMessage()}
           </Text>
         </View>
