@@ -21,20 +21,20 @@ export * from './fire';
 export * from './folder';
 export * from './github';
 export * from './home';
-export * from './language';
+
 export * from './lightbulb';
 export * from './lightning';
 export * from './palette';
 export * from './person';
 export * from './plus';
-export * from './rate';
+
 export * from './rocket';
 export * from './search';
 export * from './settings';
-export * from './share';
+
 export * from './star';
 export * from './stats';
-export * from './support';
+
 export * from './tag';
 export * from './target';
 export * from './tasks';
@@ -55,4 +55,4 @@ export * from './moon';
 export * from './sun';
 export * from './system';
 export * from './repeat';
-export * from './website';
+
