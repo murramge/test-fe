@@ -1,49 +1,464 @@
 <h1 align="center">
-  <img alt="logo" src="./assets/icon.png" width="124px" style="border-radius:10px"/><br/>
-Mobile App </h1>
+  <img alt="logo" src="./assets/teamsky-icon.png" width="124px" style="border-radius:10px"/><br/>
+TaskFlow - 스마트 할일 관리 앱
+</h1>
 
-> This Project is based on [Obytes starter](https://starter.obytes.com)
+> TypeScript + React Native + Expo 기반의 개인 및 팀 협업을 위한 모바일 할일 관리 앱
 
-## Requirements
+## 🚀 빠른 시작 가이드
 
-- [React Native dev environment ](https://reactnative.dev/docs/environment-setup)
-- [Node.js LTS release](https://nodejs.org/en/)
+### 📋 요구사항
+
+- [React Native 개발 환경](https://reactnative.dev/docs/environment-setup)
+- [Node.js LTS](https://nodejs.org/en/) (v18 이상 권장)
 - [Git](https://git-scm.com/)
-- [Watchman](https://facebook.github.io/watchman/docs/install#buildinstall), required only for macOS or Linux users
-- [Pnpm](https://pnpm.io/installation)
-- [Cursor](https://www.cursor.com/) or [VS Code Editor](https://code.visualstudio.com/download) ⚠️ Make sure to install all recommended extension from `.vscode/extensions.json`
+- [Watchman](https://facebook.github.io/watchman/docs/install#buildinstall) (macOS/Linux 사용자)
+- [pnpm](https://pnpm.io/installation)
+- **iOS**: Xcode 15.0 이상, iOS Simulator
+- **Android**: Android Studio, Android SDK (API 34 이상)
 
-## 👋 Quick start
+### ⚡ 설치 및 실행
 
-Clone the repo to your machine and install deps :
+```bash
+# 1. 저장소 클론
+git clone https://github.com/kangeunhwa/teamsky
+cd teamsky
 
-```sh
-git clone https://github.com/user/repo-name
-
-cd ./repo-name
-
+# 2. 의존성 설치
 pnpm install
-```
 
-To run the app on ios
-
-```sh
+# 3. 플랫폼별 실행
+# iOS에서 실행 (macOS만 지원)
 pnpm ios
-```
 
-To run the app on Android
-
-```sh
+# Android에서 실행
 pnpm android
+
+# 웹에서 실행 (개발용)
+pnpm web
+
+# 개발 서버만 시작 (Expo Go 앱 사용)
+pnpm start
 ```
 
-## ✍️ Documentation
+## 🛠 기술 스택
 
-- [Rules and Conventions](https://starter.obytes.com/getting-started/rules-and-conventions/)
-- [Project structure](https://starter.obytes.com/getting-started/project-structure)
-- [Environment vars and config](https://starter.obytes.com/getting-started/environment-vars-config)
-- [UI and Theming](https://starter.obytes.com/ui-and-theme/ui-theming)
-- [Components](https://starter.obytes.com/ui-and-theme/components)
-- [Forms](https://starter.obytes.com/ui-and-theme/Forms)
-- [Data fetching](https://starter.obytes.com/guides/data-fetching)
-- [Contribute to starter](https://starter.obytes.com/how-to-contribute/)
+| 카테고리       | 기술                                       |
+| -------------- | ------------------------------------------ |
+| **프레임워크** | React Native, Expo                         |
+| **언어**       | TypeScript                                 |
+| **스타일링**   | NativeWind (Tailwind CSS for React Native) |
+| **네비게이션** | Expo Router (파일 기반 라우팅)             |
+| **상태관리**   | Zustand                                    |
+| **로컬저장소** | React Native MMKV                          |
+| **폼관리**     | React Hook Form + Zod                      |
+| **개발도구**   | ESLint, TypeScript, Prettier               |
+
+## 📋 요구사항 분석 결과
+
+### 👥 대상 사용자 페르소나 분석
+
+#### 🏢 김민수 (29세) - 바쁜 직장인
+
+**배경:**
+
+- **직업**: IT 회사 프로젝트 매니저 (경력 5년)
+- **근무패턴**: 평일 오전 9시~오후 7시, 주말 개인시간 중시
+- **기술 친화도**: 높음 (다양한 생산성 앱 사용 경험)
+
+**주요 고민 (페인포인트):**
+
+- 업무와 개인 일정이 뒤섞여 관리가 어려움
+- 회의 중이나 이동 중에도 빠르게 할일을 기록하고 싶음
+- 마감일이 임박한 업무를 놓치는 경우가 종종 발생
+- 바쁜 일정 속에서도 체계적인 할일 관리 필요
+
+**앱 사용 패턴:**
+
+- **주 사용시간**: 출퇴근 시간(지하철), 점심시간, 업무 중 틈틈이
+- **사용 환경**: 이동 중, 회의실, 사무실 등 다양한 환경
+- **선호 기능**: 빠른 입력, 직관적 인터페이스, 알림 기능
+
+**핵심 니즈:**
+
+- ⚡ **빠른 접근성**: 언제 어디서든 즉시 할일 기록
+- 🗂️ **체계적 분류**: 업무/개인 일정 명확한 구분
+- ⏰ **마감일 관리**: 임박한 업무 놓치지 않기
+- 📱 **모바일 최적화**: 이동 중에도 편리한 사용
+- 📊 **생산성 추적**: 자기계발을 위한 성과 측정
+
+### 📝 핵심 사용자 스토리
+
+김민수 페르소나를 기반으로 도출된 4가지 핵심 사용자 스토리:
+
+#### 👤 사용자 관리
+
+> **"사용자로서, 나는 앱을 처음 사용할 때 간단한 회원가입을 통해 내 계정을 만들고, 이후에는 로그인을 통해 내 할일 데이터에 접근하고 싶다."**
+
+**상황**: 새로운 생산성 앱을 도입하려는 직장인  
+**목표**: 개인 데이터 보안과 접근성 확보  
+**가치**: 언제 어디서든 내 할일에 안전하게 접근
+
+#### 📝 할일 관리
+
+> **"바쁜 직장인으로서, 나는 언제든지 빠르게 할일을 추가하고, 완료된 일은 체크하며, 필요에 따라 수정하거나 삭제할 수 있어야 한다. 또한 할일들을 카테고리별로 구분하여 관리하고 싶다."**
+
+**상황**: 회의 중, 이동 중, 업무 중 갑자기 떠오르는 할일들  
+**목표**: 즉시 기록하고 체계적으로 관리  
+**가치**: 할일 누락 방지와 효율적 업무 관리
+
+#### 📊 생산성 추적
+
+> **"자기계발에 관심이 많은 사용자로서, 나는 내가 얼마나 많은 일을 완료했는지, 어떤 카테고리에서 가장 활발히 활동하는지 등을 시각적으로 확인하고 싶다."**
+
+**상황**: 주간/월간 회고 시점, 성과 평가 준비  
+**목표**: 객관적 생산성 데이터 확인  
+**가치**: 자기계발과 업무 효율성 개선
+
+#### 🎨 개인화
+
+> **"다양한 환경에서 앱을 사용하는 사용자로서, 밝은 곳에서는 라이트 모드를, 어두운 곳에서는 다크 모드를 사용하여 눈의 피로를 줄이고 싶다."**
+
+**상황**: 사무실(밝음), 지하철(어두움), 회의실(다양한 조명)  
+**목표**: 환경에 맞는 최적의 사용성  
+**가치**: 장시간 사용 시 눈의 피로 최소화
+
+### 🔍 사용자 스토리 기반 요구사항 도출
+
+**1단계: 스토리별 핵심 기능 추출**
+
+| 사용자 스토리   | 핵심 기능                      | 우선순위 | 구현 복잡도 |
+| --------------- | ------------------------------ | -------- | ----------- |
+| **사용자 관리** | 회원가입/로그인, 세션 관리     | High     | 중간        |
+| **할일 관리**   | CRUD, 빠른 추가, 카테고리 분류 | High     | 높음        |
+| **생산성 추적** | 통계, 차트, 완료율 분석        | Medium   | 높음        |
+| **개인화**      | 다크/라이트 모드 전환          | Low      | 낮음        |
+
+**2단계: 페르소나 특성 반영**
+
+김민수의 **"바쁜 직장인"** 특성을 반영한 우선순위:
+
+- ⚡ **즉시성**: 빠른 할일 추가가 최우선
+- 🎯 **효율성**: 카테고리 분류로 업무/개인 구분
+- 📱 **모바일 친화적**: 이동 중 사용을 고려한 UI/UX
+- 📊 **성과 지향**: 생산성 측정으로 자기계발 지원
+
+**3단계: 구체적인 기능 요구사항 도출**
+
+| 범주            | 기능            | 상세 요구사항                           | 사용자 스토리 연결         | 우선순위 |
+| --------------- | --------------- | --------------------------------------- | -------------------------- | -------- |
+| **인증**        | 회원가입/로그인 | 이메일 기반 간편 인증, MMKV 세션 관리   | 👤 사용자 관리             | High     |
+| **할일 CRUD**   | 기본 관리       | 생성, 조회, 수정, 삭제, 상태 변경       | 📝 할일 관리               | High     |
+| **빠른 추가**   | 즉시 기록       | 홈에서 바로 입력, 회의 중에도 사용 가능 | 📝 할일 관리 (빠른 기록)   | High     |
+| **카테고리**    | 분류 시스템     | 업무/개인 구분, 사용자 정의 카테고리    | 📝 할일 관리 (체계적 분류) | High     |
+| **생산성 통계** | 완료율 분석     | 일/주/월별 완료율, 카테고리별 활동량    | 📊 생산성 추적             | Medium   |
+| **시각적 차트** | 데이터 시각화   | 히트맵, 원형차트, 진행률 바             | 📊 생산성 추적             | Medium   |
+| **테마 시스템** | 모드 전환       | 다크/라이트 모드, 시스템 설정 연동      | 🎨 개인화                  | Low      |
+| **마감일 관리** | 일정 추적       | D-day 표시, 임박 알림 (김민수 니즈)     | 📝 할일 관리 (확장)        | Medium   |
+
+### 🏗️ 기술적 설계 결정
+
+**주요 기술 스택 선택 근거:**
+
+| 기술                      | 선택 이유                                                                                                                                                                                                                       | 대안 고려사항                                                   |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| **Expo**                  | • **간편한 설정**: Xcode/Android Studio 없이도 개발 가능<br/>• **빠른 시작**: 프로젝트 생성 후 바로 개발 시작<br/>• **실시간 미리보기**: 실제 기기에서 즉시 테스트<br/>• **통합 개발환경**: 빌드, 배포, 디버깅 모든 과정 간소화 | React Native CLI (복잡한 환경 설정), Flutter (새로운 언어 학습) |
+| **TypeScript**            | • **개발 생산성**: 자동완성, 리팩토링 도구 지원<br/>• **런타임 에러 방지**: 컴파일 시점 타입 검증<br/>• **팀 협업**: 코드 의도 명확화, 문서화 효과                                                                              | JavaScript (타입 에러 위험, 대규모 프로젝트 한계)               |
+| **Zustand**               | • **간단한 API**: `create()` 하나로 스토어 생성<br/>• **보일러플레이트 최소**: Redux 대비 80% 적은 코드<br/>• **선택적 구독**: 필요한 상태만 구독하여 리렌더링 최적화                                                           | Redux Toolkit (복잡성, 학습곡선), Jotai (원자적 상태의 복잡성)  |
+| **MMKV**                  | • **성능 우위**: AsyncStorage 대비 30배 빠른 읽기/쓰기<br/>• **동기식 API**: `await` 없이 즉시 데이터 접근<br/>• **암호화 지원**: 민감한 사용자 데이터 보호<br/>• **크로스플랫폼**: iOS/Android 동일한 성능                     | AsyncStorage (느린 속도, 비동기 복잡성), SQLite (과도한 복잡성) |
+| **NativeWind**            | • **개발 속도**: Tailwind 클래스로 빠른 스타일링<br/>• **일관성**: 디자인 시스템 자동 적용<br/>• **타입 안전**: className 자동완성 지원                                                                                         | StyleSheet (생산성 낮음), Styled Components (런타임 오버헤드)   |
+| **React Hook Form + Zod** | • **성능**: Uncontrolled 컴포넌트로 리렌더링 최소화<br/>• **타입 안전**: Zod 스키마에서 TypeScript 타입 자동 생성<br/>• **검증**: 클라이언트/서버 양쪽에서 동일한 검증 로직                                                     | Formik (많은 리렌더링), 네이티브 상태 (복잡한 검증 로직)        |
+
+**김민수 페르소나 특화 아키텍처:**
+
+```
+src/
+├── app/           # Expo Router 파일 기반 라우팅
+│   ├── (app)/     # 인증 후 메인 앱 화면
+│   └── auth/      # 로그인/회원가입 플로우
+├── components/    # 재사용 가능한 UI 컴포넌트
+│   ├── ui/        # 기본 디자인 시스템
+│   └── task/      # 할일 관련 특화 컴포넌트
+├── lib/          # 비즈니스 로직 중앙화
+│   ├── hooks/     # 커스텀 훅 (useTaskStats, useTasks)
+│   └── storage/   # MMKV 기반 데이터 관리
+└── types/        # TypeScript 타입 정의
+```
+
+## 🛠 구현 내용
+
+### ✅ 구현한 기능 목록
+
+#### 🔐 인증 및 사용자 관리
+
+- **회원가입/로그인 시스템**
+
+  - 이메일 기반 사용자 등록
+  - 로컬 사용자 데이터 검증 및 인증
+  - MMKV 기반 세션 관리
+  - 자동 로그인 유지
+
+- **사용자 온보딩**
+  - 첫 실행 시 온보딩 화면
+  - 앱 주요 기능 소개
+  - 직관적인 시작 가이드
+
+#### 🏠 홈 대시보드
+
+- **개인화된 환영 인터페이스**
+
+  - 시간대별 인사말 (아침/오후/저녁)
+  - 사용자 이름 기반 개인화
+  - 일일 할일 요약 (완료/진행중/전체)
+
+- **생산성 인사이트**
+
+  - 실시간 완료율 계산
+  - 성취도 기반 동기부여 메시지
+  - 진행률 시각화 (프로그레스 바)
+
+- **빠른 할일 추가**
+
+  - 홈에서 즉시 할일 추가
+  - 확장 가능한 입력 폼
+  - 빠른 추가 vs 상세 설정 옵션
+
+- **긴급 할일 관리**
+  - 마감일 기반 자동 우선순위 조정
+  - 3일 이내 마감 할일 별도 표시
+  - 시각적 경고 시스템
+
+#### 📝 할일 관리 시스템
+
+- **완전한 CRUD 기능**
+
+  - 할일 생성/조회/수정/삭제
+  - 실시간 상태 업데이트
+  - 낙관적 UI 업데이트
+
+- **고급 분류 시스템**
+
+  - 사용자 정의 카테고리
+  - 아이콘 및 색상 커스터마이징
+  - 카테고리별 할일 그룹핑
+
+- **우선순위 관리**
+
+  - 3단계 우선순위 (높음/보통/낮음)
+  - 시각적 우선순위 표시
+  - 우선순위 기반 정렬
+
+- **일정 관리**
+  - 마감일 설정 및 추적
+  - D-day 카운트다운
+  - 마감일 임박 알림
+
+#### 📊 통계 및 분석
+
+- **포괄적인 생산성 메트릭스**
+
+  - 완료율, 진행률, 취소율 계산
+  - 기간별 통계 (7일/30일/90일/전체)
+  - 전 기간 대비 성장률 추적
+
+- **시각적 데이터 표현**
+
+  - 카테고리별 분포 차트
+  - 우선순위별 할일 분석
+  - 활동 히트맵 (GitHub 스타일)
+  - 생산성 패턴 분석
+
+- **인터랙티브 차트**
+  - 터치 기반 데이터 상호작용
+  - 기간 필터링
+  - 실시간 데이터 업데이트
+
+#### 🎨 사용자 경험
+
+- **다크/라이트 모드**
+
+  - 시스템 설정 연동
+  - 수동 테마 전환
+  - 일관된 색상 시스템
+
+- **접근성 최적화**
+  - 스크린 리더 지원
+  - 터치 영역 최적화
+  - 색상 대비 고려
+
+#### 🔧 기술적 구현 특징
+
+- **타입 안전성**
+
+  - 엄격한 TypeScript 설정
+  - Zod 스키마 기반 유효성 검사
+  - 런타임 타입 검증
+
+- **성능 최적화**
+
+  - React.memo 기반 렌더링 최적화
+  - useMemo/useCallback 적절한 사용
+  - 지연 로딩 구현
+
+- **상태 관리**
+
+  - Zustand 기반 전역 상태
+  - 로컬 상태와 전역 상태 분리
+  - 영속성 상태 관리
+
+- **데이터 지속성**
+  - MMKV 기반 고성능 저장소
+  - 자동 백업 및 복원
+  - 데이터 마이그레이션 대비
+
+## 🤖 AI 도구 활용 내역
+
+### 🔧 사용한 AI 도구
+
+| AI 도구             | 용도                      | 활용 빈도 | 주요 역할                                     |
+| ------------------- | ------------------------- | --------- | --------------------------------------------- |
+| **Claude (Cursor)** | 전체 프로젝트 개발 파트너 | 매우 높음 | 아키텍처 설계, 코드 구현, 리팩토링, 문제 해결 |
+
+### 🔄 활용 프로세스
+
+#### 1. 프로젝트 초기 설계 (Claude 중심)
+
+**상황**: React Native 할일 관리 앱 개발 시작  
+**활용 방식**:
+
+- 김민수 페르소나 기반 요구사항 분석과 기술 스택 선택
+- Expo vs React Native CLI 비교 분석
+- 폴더 구조와 아키텍처 패턴 설계
+
+**구체적 협업 사례:**
+
+```
+나 : "TypeScript + React Native로 할일 관리 앱을 만들려고 하는데,
+        상태관리는 뭘 쓰는게 좋을까요?"
+
+Claude: "프로젝트 규모를 고려하면 Zustand를 추천합니다.
+        Redux보다 80% 적은 보일러플레이트로 빠른 개발이 가능하고..."
+```
+
+#### 2. 핵심 기능 개발 (Claude)
+
+**홈 화면 대시보드 구현:**
+
+- Claude: 전체 컴포넌트 구조와 UX 플로우 설계
+- Claude: 성능 최적화와 접근성 개선 제안
+
+**통계 차트 시스템:**
+
+- Claude: 커스텀 차트 vs 라이브러리 사용 여부 결정
+- 나 + Claude: 히트맵, 원형차트 등 시각화 로직 구현
+
+#### 3. 상태 관리 및 데이터 로직 (Claude)
+
+**MMKV 기반 로컬 저장소 설계:**
+
+- AsyncStorage 대안으로 MMKV 선택 근거 분석
+- 사용자 데이터와 할일 데이터 분리 전략 수립
+- 타입 안전한 스토리지 인터페이스 구현
+
+**Zustand 스토어 아키텍처:**
+
+- 할일, 카테고리, 사용자 상태 분리 설계
+- 선택적 구독을 통한 렌더링 최적화
+- 영속성 상태 관리 패턴 적용
+
+### ✅ AI 결과물의 검증 과정
+
+#### 1. 실시간 코드 리뷰 및 수정
+
+**Claude와의 상호 검증 프로세스:**
+
+- AI가 제안한 코드에 대해 즉시 피드백 및 개선 요청
+- 성능, 보안, 접근성 관점에서 다각도 검토
+- React Native 특화 최적화 방안 지속적 논의
+
+**실제 검증 사례:**
+
+```typescript
+// Claude 초기 제안
+const useTaskStats = () => {
+  const tasks = useTaskStore((state) => state.tasks);
+  return {
+    total: tasks.length,
+    completed: tasks.filter((t) => t.status === 'completed').length,
+  };
+};
+
+// 함께 개선한 최종 버전
+const useTaskStats = () => {
+  const tasks = useTaskStore((state) => state.tasks);
+  return useMemo(
+    () => ({
+      total: tasks.length,
+      completed: tasks.filter((t) => t.status === 'completed').length,
+      completionRate:
+        tasks.length > 0
+          ? (tasks.filter((t) => t.status === 'completed').length /
+              tasks.length) *
+            100
+          : 0,
+    }),
+    [tasks]
+  );
+};
+```
+
+#### 2. 기술적 의사결정 검증
+
+**MMKV vs AsyncStorage 선택:**
+
+- Claude: 성능 데이터와 API 차이점 분석 제공
+- 나: 프로젝트 요구사항과 비교 검토
+- 최종: 30배 빠른 성능과 동기식 API 장점으로 MMKV 선택
+
+**NativeWind vs StyleSheet:**
+
+- Claude: 개발 생산성과 유지보수성 관점 분석
+- 나: 러닝커브 고려
+- 최종: Tailwind 경험 활용 + 타입 안전성으로 NativeWind 채택
+
+### 📈 학습 및 개선 과정
+
+#### 1. AI 협업을 통한 개발 역량 향상
+
+**React Native 모범 사례 학습:**
+
+- Claude를 통해 최신 React Native 패턴과 성능 최적화 기법 습득
+- Expo Router, NativeWind 등 신기술 빠른 적용
+- 접근성과 사용자 경험 고려한 개발 프로세스 확립
+
+**문제 해결 능력 개선:**
+
+- 복잡한 상태 관리 이슈를 Claude와 함께 단계별 분석
+- 성능 병목 지점 발견과 최적화 방안 도출
+- 타입 안전성을 보장하는 개발 패턴 내재화
+
+#### 2. 효과적인 AI 활용 패턴 확립
+
+**성공적인 협업 패턴:**
+
+1. **명확한 컨텍스트 제공**: 프로젝트 목표와 제약사항 상세 전달
+2. **단계적 개발**: 큰 기능을 작은 단위로 나누어 점진적 구현
+3. **지속적 피드백**: 구현 과정에서 즉시 리뷰와 개선 요청
+4. **최종 검증**: AI 제안을 항상 비판적으로 검토 후 적용
+
+**학습된 한계점과 대응:**
+
+- **컨텍스트 유지**: 긴 개발 세션에서 이전 결정사항 재확인 필요
+- **최신 정보**: 최신 라이브러리 버전이나 API 변경사항 별도 확인
+- **도메인 특화**: 비즈니스 로직은 내가 주도하고 AI는 구현 지원
+
+---
+
+<div align="center">
+  <p>
+    <strong>TaskFlow</strong>로 더 생산적인 하루를 만들어보세요! 💪
+  </p>
+  <p>
+    Made with ❤️ using React Native & Expo
+  </p>
+</div>
