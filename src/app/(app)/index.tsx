@@ -20,7 +20,7 @@ import {
   useTaskStats,
   useTaskStore,
 } from '@/lib/hooks';
-import { Calendar, Check, Clipboard, FileText, AlertCircle, Lightbulb, Lightning, Fire, Rocket, Star, Trophy, Chart, Plus as PlusIcon, Wave, Party, ThumbsUp, Sparkles, PriorityHigh, PriorityMedium, PriorityLow, Urgent, Folder, Briefcase, Home as HomeIcon, Target, Book, DollarSign, Activity, Palette, ChartLine, Person } from '@/components/ui/icons';
+import { Calendar, Check, Clipboard, FileText, AlertCircle, Lightbulb, Lightning, Fire, Rocket, Star, Trophy, Chart, Plus as PlusIcon, Wave, PriorityHigh, PriorityMedium, PriorityLow, Urgent, Folder, Briefcase, Home as HomeIcon, Target, Book, DollarSign, Activity, Palette, ChartLine, Person } from '@/components/ui/icons';
 import { userStorage } from '@/lib/storage/user-storage';
 
 export default function Home() {

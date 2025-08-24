@@ -27,6 +27,7 @@ function TasksContent() {
   const { categoryId } = useLocalSearchParams();
   const [filters, setFilters] = useState<TaskFilters>({});
   const [showFilters, setShowFilters] = useState(true);
+  
 
   // 카테고리 아이콘 매핑
   const getCategoryIcon = (iconKey?: string) => {
@@ -160,7 +161,7 @@ function TasksContent() {
           {/* 통계 탭 */}
           <View className="mt-3 flex-row rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
             <Pressable className="flex-1 items-center rounded-md py-2" onPress={() => setFilters({})}>
-              <Text className="text-base font-bold text-blue-500">
+              <Text className="text-base font-bold text-blue-500 dark:text-blue-500">
                 {stats?.total || 0}
               </Text>
               <Text className="text-xs font-medium">
@@ -169,7 +170,7 @@ function TasksContent() {
             </Pressable>
             
             <Pressable className="flex-1 items-center rounded-md py-2" onPress={() => setFilters({status: ['pending']})}>
-              <Text className="text-base font-bold text-orange-500">
+              <Text className="text-base font-bold text-orange-500 dark:text-orange-500">
                 {stats?.pending || 0}
               </Text>
               <Text className="text-xs font-medium">
@@ -178,7 +179,7 @@ function TasksContent() {
             </Pressable>
 
             <Pressable className="flex-1 items-center rounded-md py-2" onPress={() => setFilters({status: ['completed']})}>
-              <Text className="text-base font-bold text-green-500">
+              <Text className="text-base font-bold text-green-500 dark:text-green-500">
                 {stats?.completed || 0}
               </Text>
               <Text className="text-xs font-medium">

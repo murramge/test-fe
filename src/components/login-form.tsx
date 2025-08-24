@@ -67,7 +67,7 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
             testID="login-button"
             label="로그인"
             onPress={handleSubmit(onSubmit)}
-            className="mt-4"
+            className="mt-4 bg-blue-600 dark:bg-blue-500"
           />
 
           <View className="mt-6 flex-row items-center justify-center">

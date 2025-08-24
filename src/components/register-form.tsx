@@ -88,7 +88,7 @@ export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
           testID="register-button"
           label="회원가입"
           onPress={handleSubmit(onSubmit)}
-          className="mt-4"
+          className="mt-4 bg-blue-600 dark:bg-blue-500"
         />
 
         <View className="mt-6 flex-row items-center justify-center">

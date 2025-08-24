@@ -34,6 +34,7 @@ export default function TabLayout() {
   if (isFirstTime) {
     return <Redirect href="/onboarding" />;
   }
+
   if (status === 'signOut') {
     return <Redirect href="/login" />;
   }
@@ -85,8 +86,6 @@ export default function TabLayout() {
           tabBarButtonTestID: 'stats-tab',
         }}
       />
-
-
 
       <Tabs.Screen
         name="settings"

@@ -19,7 +19,7 @@ export function TaskFiltersComponent({
 
     { value: 'pending', label: '진행중', color: 'bg-orange-500' },
     { value: 'completed', label: '완료', color: 'bg-green-500' },
-    { value: 'cancelled', label: '취소', color: 'bg-gray-500' },
+   
   ];
 
   const priorityOptions: {
