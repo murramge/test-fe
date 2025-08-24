@@ -93,7 +93,7 @@ pnpm start
 
 #### **React Native + Expo**
 
-- **대안**: React Native CLI (복잡한 네이티브 설정), Flutter (러닝커브)
+- **대안**: React Native CLI (복잡한 네이티브 설정)
 - **선택 이유**:
   - 빠른 시작: 프로젝트 생성 후 바로 개발 시작
   - 실시간 미리보기: 실제 기기에서 즉시 테스트
